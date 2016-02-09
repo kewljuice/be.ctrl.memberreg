@@ -123,16 +123,29 @@ function memberreg_civicrm_alterSettingsFolders(&$metaDataFolders = NULL) {
 }
 
 /**
- * Functions below this ship commented out. Uncomment as required.
+ * CiviCRM hook buildForm
  *
-
-/**
- * Implements hook_civicrm_preProcess().
+ * http://wiki.civicrm.org/confluence/display/CRMDOC/Hook+Reference
+ * http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_post
+ * http://wiki.civicrm.org/confluence/display/CRMDOC/Form+hooks
+ * http://civicrm.stackexchange.com/questions/213/can-i-find-the-target-contact-id-in-hook-civicrm-buildform
+ * http://www.smarty.net/forums/viewtopic.php?t=11435
+ * http://www.jackrabbithanna.com/articles/easy-jquery-modificaiton-civicrm-forms
+ * https://www.prestashop.com/forums/topic/218203-solved-how-to-view-module-smarty-variables
+ * https://forum.civicrm.org/index.php?topic=31686.0
  *
- * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_preProcess
- *
-function memberreg_civicrm_preProcess($formName, &$form) {
-
+ */
+function memberreg_civicrm_buildForm($formName, &$form) {
+  /*
+   * Include JS & CSS
+   * https://forum.civicrm.org/index.php?topic=27216.0
+   */
+  if (strpos($formName, 'CRM_Contribute_Form_Contribution_') !== FALSE) {
+    CRM_Core_Resources::singleton()
+      // include JS file
+      ->addScriptFile('be.ctrl.memberreg', 'js/ctrl-multistep.js')
+      // include CSS file
+      ->addStyleFile('be.ctrl.memberreg', 'css/ctrl-memberreg.css')
+      ->addStyleFile('be.ctrl.memberreg', 'css/font-awesome.min.css');
+  }
 }
-
-*/
