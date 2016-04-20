@@ -31,21 +31,25 @@
         <fieldset>
         {if $renewal_mode}
             {if $membershipBlock.renewal_title}
-                <legend>{$membershipBlock.renewal_title}</legend>
+                <!-- <legend>{$membershipBlock.renewal_title}</legend> -->
             {/if}
             {if $membershipBlock.renewal_text}
+                <!--
                 <div id="membership-intro" class="crm-section membership_renewal_intro-section">
                     {$membershipBlock.renewal_text}
                 </div>
+                -->
             {/if}
         {else}
           {if $membershipBlock.new_title}
-              <legend>{$membershipBlock.new_title}</legend>
+              <!-- <legend>{$membershipBlock.new_title}</legend> -->
           {/if}
           {if $membershipBlock.new_text}
+              <!--
               <div id="membership-intro" class="crm-section membership_new_intro-section">
                  {$membershipBlock.new_text}
               </div>
+              -->
           {/if}
         {/if}
         {if !empty($membershipTypes)}
