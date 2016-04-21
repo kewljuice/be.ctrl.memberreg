@@ -25,7 +25,7 @@
 *}
 
 {* open div class .memberreg-container *}
-<div class="memberreg-container">
+<div class="memberreg-container" id="memberreg-thankyou">
 
     {if $action & 1024}
         {include file="CRM/Contribute/Form/Contribution/PreviewHeader.tpl"}
@@ -61,44 +61,11 @@
             <br/>
         {/if}
 
-        <!-- notification/ -->
-        <div id="help">
+        <!-- notification -->
+        <!-- <div id="help"> -->
             {* PayPal_Standard sets contribution_mode to 'notify'. We don't know if transaction is successful until we receive the IPN (payment notification) *}
-            {if $is_pay_later}
-                <div class="bold">{$pay_later_receipt}</div>
-                {if $is_email_receipt}
-                    <div>
-                        {if $onBehalfEmail AND ($onBehalfEmail neq $email)}
-                            {ts 1=$email 2=$onBehalfEmail}An email confirmation with these payment instructions has been sent to %1 and to %2.{/ts}
-                        {else}
-                            {ts 1=$email}An email confirmation with these payment instructions has been sent to %1.{/ts}
-                        {/if}
-                    </div>
-                {/if}
-            {elseif $contributeMode EQ 'notify' OR ($contributeMode EQ 'direct' && $is_recur) }
-                <div>{ts 1=$paymentProcessor.name}Your contribution has been submitted to %1 for processing. Please print this page for your records.{/ts}</div>
-                {if $is_email_receipt}
-                    <div>
-                        {if $onBehalfEmail AND ($onBehalfEmail neq $email)}
-                            {ts 1=$email 2=$onBehalfEmail}An email receipt will be sent to %1 and to %2 once the transaction is processed successfully.{/ts}
-                        {else}
-                            {ts 1=$email}An email receipt will be sent to %1 once the transaction is processed successfully.{/ts}
-                        {/if}
-                    </div>
-                {/if}
-            {else}
-                <div>{ts}Your transaction has been processed successfully. Please print this page for your records.{/ts}</div>
-                {if $is_email_receipt}
-                    <div>
-                        {if $onBehalfEmail AND ($onBehalfEmail neq $email)}
-                            {ts 1=$email 2=$onBehalfEmail}An email receipt has also been sent to %1 and to %2{/ts}
-                        {else}
-                            {ts 1=$email}An email receipt has also been sent to %1{/ts}
-                        {/if}
-                    </div>
-                {/if}
-            {/if}
-        </div>
+            <!-- SEE ORIGINAL FILE FOR CONTENT -->
+        <!-- </div> -->
         <!-- /notification -->
 
         <!-- <div class="spacer"></div> -->

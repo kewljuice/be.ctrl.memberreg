@@ -25,7 +25,7 @@
 *}
 
 {* open div class .memberreg-container *}
-<div class="memberreg-container">
+<div class="memberreg-container" id="memberreg-main">
 
     {* Callback snippet: On-behalf profile *}
     {if $snippet and !empty($isOnBehalfCallback)}
@@ -220,7 +220,7 @@
             {* open div class .memberreg-block *}
             <div class="memberreg-block" id="memberreg-email">
                 {* open div class .memberreg-title *}
-                <div class="memberreg-title"><h2>Your email</h2></div>
+                <div class="memberreg-title"><h2>{ts domain='be.ctrl.memberreg'}Your email address{/ts}</h2></div>
                 {* open div class .memberreg-content *}
                 <div class="memberreg-content">
                     {assign var=n value=email-$bltID}
@@ -267,7 +267,7 @@
             {* open div class .memberreg-block *}
             <div class="memberreg-block" id="memberreg-data">
                 {* open div class .memberreg-title *}
-                <div class="memberreg-title"><h2>Your personal data</h2></div>
+                <div class="memberreg-title"><h2>{ts domain='be.ctrl.memberreg'}Your personal information{/ts}</h2></div>
                 {* open div class .memberreg-content *}
                 <div class="memberreg-content">
                     <div class="crm-public-form-item crm-group custom_pre_profile-group">
@@ -279,10 +279,24 @@
             {* close div class .memberreg-block *}
 
             {* open div class .memberreg-block *}
+            <div class="memberreg-block" id="memberreg-data">
+                {* open div class .memberreg-title *}
+                <div class="memberreg-title"><h2>{ts domain='be.ctrl.memberreg'}Your additional data{/ts}</h2></div>
+                {* open div class .memberreg-content *}
+                <div class="memberreg-content">
+                    <div class="crm-public-form-item crm-group custom_post_profile-group">
+                        {include file="CRM/UF/Form/Block.tpl" fields=$customPost}
+                    </div>
+                </div>
+                {* close div class .memberreg-content *}
+            </div>
+            {* close div class .memberreg-block *}
+
+            {* open div class .memberreg-block *}
             {if $isCMS}
                 <div class="memberreg-block" id="memberreg-login">
                     {* open div class .memberreg-title *}
-                    <div class="memberreg-title"><h2>Your website login</h2></div>
+                    <div class="memberreg-title"><h2>{ts domain='be.ctrl.memberreg'}Your website login{/ts}</h2></div>
                     {* open div class .memberreg-content *}
                     <div class="memberreg-content">
                         {* User account registration option. Displays if enabled for one of the profiles on this page. *}
@@ -334,7 +348,7 @@
             <div class="memberreg-block" id="memberreg-member">
                 {if !empty($useForMember)}
                     {* open div class .memberreg-title *}
-                    <div class="memberreg-title"><h2>Your membership</h2></div>
+                    <div class="memberreg-title"><h2>{ts domain='be.ctrl.memberreg'}Membership{/ts}</h2></div>
                     {* open div class .memberreg-content *}
                     <div class="memberreg-content">
                         <div class="crm-public-form-item crm-section">
@@ -353,7 +367,7 @@
             {* open div class .memberreg-block *}
             <div class="memberreg-block" id="memberreg-payment">
                 {* open div class .memberreg-title *}
-                <div class="memberreg-title"><h2>Your payment</h2></div>
+                <div class="memberreg-title"><h2>{ts domain='be.ctrl.memberreg'}Payment method{/ts}</h2></div>
                 {* open div class .memberreg-content *}
                 <div class="memberreg-content">
                     {if $form.payment_processor.label}
@@ -390,10 +404,6 @@
                 {* close div class .memberreg-content *}
             </div>
             {* close div class .memberreg-block *}
-
-            <div class="crm-public-form-item crm-group custom_post_profile-group">
-                {include file="CRM/UF/Form/Block.tpl" fields=$customPost}
-            </div>
 
             {if $is_monetary and $form.bank_account_number}
                 <div id="payment_notice">
