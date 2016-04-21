@@ -1,0 +1,21 @@
+#
+msgid ""
+msgstr ""
+
+msgid "Your email address"
+msgstr ""
+
+msgid "Your personal information"
+msgstr ""
+
+msgid "Your additional data"
+msgstr ""
+
+msgid "Your website login"
+msgstr ""
+
+msgid "Membership"
+msgstr ""
+
+msgid "Payment method"
+msgstr ""
