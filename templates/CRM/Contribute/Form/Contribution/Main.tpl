@@ -265,9 +265,10 @@
             {/if}
 
             {* open div class .memberreg-block *}
-            <div class="memberreg-block" id="memberreg-data">
+            <div class="memberreg-block" id="memberreg-pre">
                 {* open div class .memberreg-title *}
-                <div class="memberreg-title"><h2>{ts domain='be.ctrl.memberreg'}Your personal information{/ts}</h2></div>
+                <div class="memberreg-title"><h2>{ts domain='be.ctrl.memberreg'}Your personal information{/ts}</h2>
+                </div>
                 {* open div class .memberreg-content *}
                 <div class="memberreg-content">
                     <div class="crm-public-form-item crm-group custom_pre_profile-group">
@@ -278,19 +279,21 @@
             </div>
             {* close div class .memberreg-block *}
 
-            {* open div class .memberreg-block *}
-            <div class="memberreg-block" id="memberreg-data">
-                {* open div class .memberreg-title *}
-                <div class="memberreg-title"><h2>{ts domain='be.ctrl.memberreg'}Your additional data{/ts}</h2></div>
-                {* open div class .memberreg-content *}
-                <div class="memberreg-content">
-                    <div class="crm-public-form-item crm-group custom_post_profile-group">
-                        {include file="CRM/UF/Form/Block.tpl" fields=$customPost}
+            {if $customPost}
+                {* open div class .memberreg-block *}
+                <div class="memberreg-block" id="memberreg-post">
+                    {* open div class .memberreg-title *}
+                    <div class="memberreg-title"><h2>{ts domain='be.ctrl.memberreg'}Your additional data{/ts}</h2></div>
+                    {* open div class .memberreg-content *}
+                    <div class="memberreg-content">
+                        <div class="crm-public-form-item crm-group custom_post_profile-group">
+                            {include file="CRM/UF/Form/Block.tpl" fields=$customPost}
+                        </div>
                     </div>
+                    {* close div class .memberreg-content *}
                 </div>
-                {* close div class .memberreg-content *}
-            </div>
-            {* close div class .memberreg-block *}
+                {* close div class .memberreg-block *}
+            {/if}
 
             {* open div class .memberreg-block *}
             {if $isCMS}
@@ -418,15 +421,17 @@
                 {include file='CRM/common/ReCAPTCHA.tpl'}
             {/if}
 
-            {* open div class .memberreg-footer *}
-            <div class="memberreg-footer">
-                {if $footer_text}
+
+            {if $footer_text}
+                {* open div class .memberreg-footer *}
+                <div class="memberreg-footer">
                     <div id="footer_text" class="crm-public-form-item crm-section contribution_footer_text-section">
                         <p>{$footer_text}</p>
                     </div>
-                {/if}
-            </div>
-            {* close div class .memberreg-footer *}
+                </div>
+                {* close div class .memberreg-footer *}
+            {/if}
+
 
             {* open div class .memberreg-button *}
             <div class="memberreg-button">

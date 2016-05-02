@@ -14,12 +14,11 @@
 
 cj(function ($, ts) {
     'use strict';
-
     /*
      /* The code below will alter the membership registration.
      */
 
     // Print log if javascript file is loaded.
-    console.log("ctrl-memberreg.js loaded");
+    // console.log("ctrl-memberreg.js loaded");
 
 }(CRM.$, CRM.ts('be.ctrl.eventsreg')));
