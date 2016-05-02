@@ -234,6 +234,7 @@
                 </div>
                 {* close div class .memberreg-content *}
             </div>
+            {* close div class .memberreg-block *}
 
             {if $form.is_for_organization}
                 <div class="crm-public-form-item crm-section {$form.is_for_organization.name}-section">
