@@ -145,7 +145,6 @@ function memberreg_civicrm_buildForm($formName, &$form) {
       // include JS file
       ->addScriptFile('be.ctrl.memberreg', 'js/ctrl-memberreg.js')
       // include CSS file
-      ->addStyleFile('be.ctrl.memberreg', 'css/ctrl-memberreg.css')
-      ->addStyleFile('be.ctrl.memberreg', 'css/font-awesome.min.css');
+      ->addStyleFile('be.ctrl.memberreg', 'css/ctrl-memberreg.css');
   }
 }
