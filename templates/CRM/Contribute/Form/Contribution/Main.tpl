@@ -36,34 +36,34 @@
     {literal}
         <script type="text/javascript">
 
-            // Putting these functions directly in template so they are available for standalone forms
-            function useAmountOther() {
-                var priceset = {/literal}{if $contriPriceset}'{$contriPriceset}'
-                {else}0{/if}{literal};
+          // Putting these functions directly in template so they are available for standalone forms
+          function useAmountOther() {
+            var priceset = {/literal}{if $contriPriceset}'{$contriPriceset}'
+              {else}0{/if}{literal};
 
-                for (i = 0; i < document.Main.elements.length; i++) {
-                    element = document.Main.elements[i];
-                    if (element.type == 'radio' && element.name == priceset) {
-                        if (element.value == '0') {
-                            element.click();
-                        }
-                        else {
-                            element.checked = false;
-                        }
-                    }
+            for (i = 0; i < document.Main.elements.length; i++) {
+              element = document.Main.elements[i];
+              if (element.type == 'radio' && element.name == priceset) {
+                if (element.value == '0') {
+                  element.click();
                 }
+                else {
+                  element.checked = false;
+                }
+              }
             }
+          }
 
-            function clearAmountOther() {
-                var priceset = {/literal}{if $priceset}'#{$priceset}'
-                {else}0{/if}{literal}
-                if (priceset) {
-                    cj(priceset).val('');
-                    cj(priceset).blur();
-                }
-                if (document.Main.amount_other == null) return; // other_amt field not present; do nothing
-                document.Main.amount_other.value = "";
+          function clearAmountOther() {
+            var priceset = {/literal}{if $priceset}'#{$priceset}'
+              {else}0{/if}{literal}
+            if (priceset) {
+              cj(priceset).val('');
+              cj(priceset).blur();
             }
+            if (document.Main.amount_other == null) return; // other_amt field not present; do nothing
+            document.Main.amount_other.value = "";
+          }
 
         </script>
     {/literal}
@@ -427,88 +427,88 @@
             {literal}
 
             cj('input[name="soft_credit_type_id"]').on('change', function () {
-                enableHonorType();
+              enableHonorType();
             });
 
             function enableHonorType() {
-                var selectedValue = cj('input[name="soft_credit_type_id"]:checked');
-                if (selectedValue.val() > 0) {
-                    cj('#honorType').show();
-                }
-                else {
-                    cj('#honorType').hide();
-                }
+              var selectedValue = cj('input[name="soft_credit_type_id"]:checked');
+              if (selectedValue.val() > 0) {
+                cj('#honorType').show();
+              }
+              else {
+                cj('#honorType').hide();
+              }
             }
 
             cj('input[id="is_recur"]').on('change', function () {
-                toggleRecur();
+              toggleRecur();
             });
 
             function toggleRecur() {
-                var isRecur = cj('input[id="is_recur"]:checked');
-                var allowAutoRenew = {/literal}'{$allowAutoRenewMembership}'{literal};
-                var quickConfig = {/literal}{$quickConfig}{literal};
-                if (allowAutoRenew && cj("#auto_renew") && quickConfig) {
-                    showHideAutoRenew(null);
-                }
-                if (isRecur.val() > 0) {
-                    cj('#recurHelp').show();
-                    cj('#amount_sum_label').text('{/literal}{ts escape='js'}Regular amount{/ts}{literal}');
-                }
-                else {
-                    cj('#recurHelp').hide();
-                    cj('#amount_sum_label').text('{/literal}{ts escape='js'}Total amount{/ts}{literal}');
-                }
+              var isRecur = cj('input[id="is_recur"]:checked');
+              var allowAutoRenew = {/literal}'{$allowAutoRenewMembership}'{literal};
+              var quickConfig = {/literal}{$quickConfig}{literal};
+              if (allowAutoRenew && cj("#auto_renew") && quickConfig) {
+                showHideAutoRenew(null);
+              }
+              if (isRecur.val() > 0) {
+                cj('#recurHelp').show();
+                cj('#amount_sum_label').text('{/literal}{ts escape='js'}Regular amount{/ts}{literal}');
+              }
+              else {
+                cj('#recurHelp').hide();
+                cj('#amount_sum_label').text('{/literal}{ts escape='js'}Total amount{/ts}{literal}');
+              }
             }
 
             function pcpAnonymous() {
-                // clear nickname field if anonymous is true
-                if (document.getElementsByName("pcp_is_anonymous")[1].checked) {
-                    document.getElementById('pcp_roll_nickname').value = '';
-                }
-                if (!document.getElementsByName("pcp_display_in_roll")[0].checked) {
-                    cj('#nickID').hide();
-                    cj('#nameID').hide();
-                    cj('#personalNoteID').hide();
+              // clear nickname field if anonymous is true
+              if (document.getElementsByName("pcp_is_anonymous")[1].checked) {
+                document.getElementById('pcp_roll_nickname').value = '';
+              }
+              if (!document.getElementsByName("pcp_display_in_roll")[0].checked) {
+                cj('#nickID').hide();
+                cj('#nameID').hide();
+                cj('#personalNoteID').hide();
+              }
+              else {
+                if (document.getElementsByName("pcp_is_anonymous")[0].checked) {
+                  cj('#nameID').show();
+                  cj('#nickID').show();
+                  cj('#personalNoteID').show();
                 }
                 else {
-                    if (document.getElementsByName("pcp_is_anonymous")[0].checked) {
-                        cj('#nameID').show();
-                        cj('#nickID').show();
-                        cj('#personalNoteID').show();
-                    }
-                    else {
-                        cj('#nameID').show();
-                        cj('#nickID').hide();
-                        cj('#personalNoteID').hide();
-                    }
+                  cj('#nameID').show();
+                  cj('#nickID').hide();
+                  cj('#personalNoteID').hide();
                 }
+              }
             }
 
             CRM.$(function ($) {
-                enableHonorType();
-                toggleRecur();
-                skipPaymentMethod();
+              enableHonorType();
+              toggleRecur();
+              skipPaymentMethod();
             });
 
             CRM.$(function ($) {
-                // highlight price sets
-                function updatePriceSetHighlight() {
-                    $('#priceset .price-set-row span').removeClass('highlight');
-                    $('#priceset .price-set-row input:checked').parent().addClass('highlight');
-                }
+              // highlight price sets
+              function updatePriceSetHighlight() {
+                $('#priceset .price-set-row span').removeClass('highlight');
+                $('#priceset .price-set-row input:checked').parent().addClass('highlight');
+              }
 
-                $('#priceset input[type="radio"]').change(updatePriceSetHighlight);
-                updatePriceSetHighlight();
+              $('#priceset input[type="radio"]').change(updatePriceSetHighlight);
+              updatePriceSetHighlight();
 
-                // Update pledge contribution amount when pledge checkboxes change
-                $("input[name^='pledge_amount']").on('change', function () {
-                    var total = 0;
-                    $("input[name^='pledge_amount']:checked").each(function () {
-                        total += Number($(this).attr('amount'));
-                    });
-                    $("input[name^='price_']").val(total.toFixed(2));
+              // Update pledge contribution amount when pledge checkboxes change
+              $("input[name^='pledge_amount']").on('change', function () {
+                var total = 0;
+                $("input[name^='pledge_amount']:checked").each(function () {
+                  total += Number($(this).attr('amount'));
                 });
+                $("input[name^='price_']").val(total.toFixed(2));
+              });
             });
             {/literal}
         </script>
