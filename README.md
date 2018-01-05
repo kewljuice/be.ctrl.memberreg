@@ -2,7 +2,6 @@ CiviCRM member registration extension
 
 Adds custom css and javascript to member registration forms
 - [Installation](#installation)
-- [Configuration](#configuration)
 
 ***
 
