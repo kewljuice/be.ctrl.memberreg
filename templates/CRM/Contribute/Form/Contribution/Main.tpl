@@ -36,34 +36,34 @@
     {literal}
         <script type="text/javascript">
 
-          // Putting these functions directly in template so they are available for standalone forms
-          function useAmountOther() {
-            var priceset = {/literal}{if $contriPriceset}'{$contriPriceset}'
-              {else}0{/if}{literal};
+            // Putting these functions directly in template so they are available for standalone forms
+            function useAmountOther() {
+                var priceset = {/literal}{if $contriPriceset}'{$contriPriceset}'
+                {else}0{/if}{literal};
 
-            for (i = 0; i < document.Main.elements.length; i++) {
-              element = document.Main.elements[i];
-              if (element.type == 'radio' && element.name == priceset) {
-                if (element.value == '0') {
-                  element.click();
+                for (i = 0; i < document.Main.elements.length; i++) {
+                    element = document.Main.elements[i];
+                    if (element.type == 'radio' && element.name == priceset) {
+                        if (element.value == '0') {
+                            element.click();
+                        }
+                        else {
+                            element.checked = false;
+                        }
+                    }
                 }
-                else {
-                  element.checked = false;
-                }
-              }
             }
-          }
 
-          function clearAmountOther() {
-            var priceset = {/literal}{if $priceset}'#{$priceset}'
-              {else}0{/if}{literal}
-            if (priceset) {
-              cj(priceset).val('');
-              cj(priceset).blur();
+            function clearAmountOther() {
+                var priceset = {/literal}{if $priceset}'#{$priceset}'
+                {else}0{/if}{literal}
+                if (priceset) {
+                    cj(priceset).val('');
+                    cj(priceset).blur();
+                }
+                if (document.Main.amount_other == null) return; // other_amt field not present; do nothing
+                document.Main.amount_other.value = "";
             }
-            if (document.Main.amount_other == null) return; // other_amt field not present; do nothing
-            document.Main.amount_other.value = "";
-          }
 
         </script>
     {/literal}
@@ -83,32 +83,6 @@
                 </div>
             {/if}
 
-            {* start custom intro title *}
-            <div class="memberreg-intro">
-                {if !empty($useForMember) AND !$is_quick_config}
-                    {if $renewal_mode}
-                        {if $membershipBlock.renewal_title}
-                            <h2>{$membershipBlock.renewal_title}</h2>
-                        {/if}
-                        {if $membershipBlock.renewal_text}
-                            <div class="">
-                                {$membershipBlock.renewal_text}
-                            </div>
-                        {/if}
-                    {else}
-                        {if $membershipBlock.new_title}
-                            <h2>{$membershipBlock.new_title}</h2>
-                        {/if}
-                        {if $membershipBlock.new_text}
-                            <div class="">
-                                {$membershipBlock.new_text}
-                            </div>
-                        {/if}
-                    {/if}
-                {/if}
-            </div>
-            {* close custom intro title *}
-
             {* open div class .memberreg-preview *}
             <div class="memberreg-preview">
                 <div id="intro_text" class="crm-public-form-item crm-section intro_text-section">
@@ -121,6 +95,34 @@
             {if $islifetime or $ispricelifetime }
                 <div class="help">{ts}You have a current Lifetime Membership which does not need to be renewed.{/ts}</div>
             {/if}
+
+
+
+                {if !empty($useForMember) && !$ccid}
+                    <div class="crm-public-form-item crm-section">
+                        {include file="CRM/Contribute/Form/Contribution/MembershipBlock.tpl" context="makeContribution"}
+                    </div>
+                {elseif !empty($ccid)}
+                    {if $lineItem && $priceSetID && !$is_quick_config}
+                        <div class="header-dark">
+                            {ts}Contribution Information{/ts}
+                        </div>
+                        {assign var="totalAmount" value=$pendingAmount}
+                        {include file="CRM/Price/Page/LineItem.tpl" context="Contribution"}
+                    {else}
+                        <div class="display-block">
+                            <td class="label">{$form.total_amount.label}</td>
+                            <td><span>{$form.total_amount.html|crmMoney}
+                                    &nbsp;&nbsp;{if $taxAmount}(includes {$taxTerm} of {$taxAmount|crmMoney}){/if}</span>
+                            </td>
+                        </div>
+                    {/if}
+                {else}
+                    <div id="priceset-div">
+                        {include file="CRM/Price/Form/PriceSet.tpl" extends="Contribution"}
+                    </div>
+                {/if}
+
 
             {if !$ccid}
                 {crmRegion name='contribution-main-pledge-block'}
@@ -175,18 +177,10 @@
                                 {$form.frequency_unit.html}
                             {/if}
                             {if $is_recur_installments}
-                                <span id="recur_installments_num">
-          {ts}for{/ts} {$form.installments.html} {$form.installments.label}
-          </span>
+                                <span id="recur_installments_num">{ts}for{/ts} {$form.installments.html} {$form.installments.label}</span>
                             {/if}
                             <div id="recurHelp" class="description">
-                                {ts}Your recurring contribution will be processed automatically.{/ts}
-                                {if $is_recur_installments}
-                                    {ts}You can specify the number of installments, or you can leave the number of installments blank if you want to make an open-ended commitment. In either case, you can choose to cancel at any time.{/ts}
-                                {/if}
-                                {if $is_email_receipt}
-                                    {ts}You will receive an email receipt for each recurring contribution.{/ts}
-                                {/if}
+                                {$recurringHelpText}
                             </div>
                         </div>
                         <div class="clear"></div>
@@ -200,24 +194,51 @@
                     </div>
                 {/if}
 
-                {* open div class .memberreg-block *}
-                <div class="memberreg-block" id="memberreg-email">
-                    {* open div class .memberreg-title *}
-                    <div class="memberreg-title"><h2>{ts domain='be.ctrl.memberreg'}Your email address{/ts}</h2></div>
-                    {* open div class .memberreg-content *}
-                    <div class="memberreg-content">
-                        {assign var=n value=email-$bltID}
-                        <div class="crm-public-form-item crm-section {$form.$n.name}-section">
-                            <div class="label">{$form.$n.label}</div>
-                            <div class="content">
-                                {$form.$n.html}
-                            </div>
-                            <div class="clear"></div>
+                {if $showMainEmail}
+                    {* open div class .memberreg-block *}
+                    <div class="memberreg-block" id="memberreg-email">
+                        {* open div class .memberreg-title *}
+                        <div class="memberreg-title"><h2>{ts domain='be.ctrl.memberreg'}Your email address{/ts}</h2>
                         </div>
+                        {* open div class .memberreg-content *}
+                        <div class="memberreg-content">
+                            {assign var=n value=email-$bltID}
+                            <div class="crm-public-form-item crm-section {$form.$n.name}-section">
+                                <div class="label">{$form.$n.label}</div>
+                                <div class="content">
+                                    {$form.$n.html}
+                                </div>
+                                <div class="clear"></div>
+                            </div>
+
+                        </div>
+                        {* close div class .memberreg-content *}
                     </div>
-                    {* close div class .memberreg-content *}
+                    {* close div class .memberreg-block *}
+                {/if}
+
+                <div id='onBehalfOfOrg' class="crm-public-form-item crm-section">
+                    {include file="CRM/Contribute/Form/Contribution/OnBehalfOf.tpl"}
                 </div>
-                {* close div class .memberreg-block *}
+
+                {* User account registration option. Displays if enabled for one of the profiles on this page. *}
+                {if $showCMS }
+                    {* open div class .memberreg-block *}
+                    <div class="memberreg-block" id="memberreg-user">
+                        {* open div class .memberreg-title *}
+                        <div class="memberreg-title"><h2>{ts domain='be.ctrl.memberreg'}Your website login{/ts}</h2>
+                        </div>
+                        {* open div class .memberreg-content *}
+                        <div class="memberreg-content">
+                            <div class="crm-public-form-item crm-section cms_user-section">
+                                {include file="CRM/common/CMSUser.tpl"}
+                            </div>
+                        </div>
+                        {* close div class .memberreg-content *}
+                    </div>
+                    {* close div class .memberreg-block *}
+                {/if}
+
                 <div class="crm-public-form-item crm-section premium_block-section">
                     {include file="CRM/Contribute/Form/Contribution/PremiumBlock.tpl" context="makeContribution"}
                 </div>
@@ -313,79 +334,49 @@
                 {* end of ccid loop *}
             {/if}
 
-            {* open div class .memberreg-block *}
-            <div class="memberreg-block" id="memberreg-member">
-                {if !empty($useForMember) && !$ccid}
-                    {* open div class .memberreg-title *}
-                    <div class="memberreg-title"><h2>{ts domain='be.ctrl.memberreg'}Membership{/ts}</h2></div>
-                    {* open div class .memberreg-content *}
-                    <div class="memberreg-content">
-                        <div class="crm-public-form-item crm-section">
-                            {include file="CRM/Contribute/Form/Contribution/MembershipBlock.tpl" context="makeContribution"}
-                        </div>
-                    </div>
-                    {* close div class .memberreg-content *}
-                {elseif !empty($ccid)}
-                    {if $lineItem && $priceSetID && !$is_quick_config}
-                        <div class="header-dark">
-                            {ts}Contribution Information{/ts}
-                        </div>
-                        {assign var="totalAmount" value=$pendingAmount}
-                        {include file="CRM/Price/Page/LineItem.tpl" context="Contribution"}
-                    {else}
-                        <div class="display-block">
-                            <td class="label">{$form.total_amount.label}</td>
-                            <td><span>{$form.total_amount.html|crmMoney}</span></td>
-                        </div>
-                    {/if}
-                {else}
-                    <div id="priceset-div">
-                        {include file="CRM/Price/Form/PriceSet.tpl" extends="Contribution"}
-                    </div>
-                {/if}
-            </div>
-            {* close div class .memberreg-block *}
+            {if $form.payment_processor_id.label}
+                {* PP selection only works with JS enabled, so we hide it initially *}
+                <!-- <fieldset class="crm-public-form-item crm-group payment_options-group" style="display:none;"> -->
+                <div class="crm-public-form-item crm-group payment_options-group" style="display:none;">
+                    {* open div class .memberreg-block *}
+                    <div class="memberreg-block" id="memberreg-payment">
+                        {* open div class .memberreg-title *}
+                        <div class="memberreg-title"><h2>{ts domain='be.ctrl.memberreg'}Payment method{/ts}</h2></div>
+                        {* open div class .memberreg-content *}
+                        <div class="memberreg-content">
 
-            {* open div class .memberreg-block *}
-            <div class="memberreg-block" id="memberreg-payment">
-                {* open div class .memberreg-title *}
-                <div class="memberreg-title"><h2>{ts domain='be.ctrl.memberreg'}Payment method{/ts}</h2></div>
-                {* open div class .memberreg-content *}
-                <div class="memberreg-content">
-                    {if $form.payment_processor.label}
-                        {* PP selection only works with JS enabled, so we hide it initially *}
-                        <fieldset class="crm-public-form-item crm-group payment_options-group" style="display:none;">
                             <!-- <legend>{ts}Payment Options{/ts}</legend> -->
                             <div class="crm-public-form-item crm-section payment_processor-section">
-                                <div class="label">{$form.payment_processor.label}</div>
-                                <div class="content">{$form.payment_processor.html}</div>
+                                <div class="label">{$form.payment_processor_id.label}</div>
+                                <div class="content">{$form.payment_processor_id.html}</div>
                                 <div class="clear"></div>
                             </div>
-                        </fieldset>
-                    {/if}
-                    {if $is_pay_later}
-                        <fieldset class="crm-public-form-item crm-group pay_later-group">
-                            <!-- <legend>{ts}Payment Options{/ts}</legend> -->
-                            <div class="crm-public-form-item crm-section pay_later_receipt-section">
-                                <div class="label">&nbsp;</div>
-                                <div class="content">
-                                    [x] {$pay_later_text}
-                                </div>
-                                <div class="clear"></div>
-                            </div>
-                        </fieldset>
-                    {/if}
-                    <div id="billing-payment-block">
-                        {* If we have a payment processor, load it - otherwise it happens via ajax *}
-                        {if $paymentProcessorID or $isBillingAddressRequiredForPayLater}
-                            {include file="CRM/Contribute/Form/Contribution/Main.tpl" snippet=4}
-                        {/if}
+
+                        </div>
+                        {* close div class .memberreg-content *}
                     </div>
-                    {include file="CRM/common/paymentBlock.tpl"}
+                    {* close div class .memberreg-block *}
                 </div>
-                {* close div class .memberreg-content *}
+                <!-- </fieldset> -->
+            {/if}
+
+            {if $is_pay_later}
+                <fieldset class="crm-public-form-item crm-group pay_later-group">
+                    <legend>{ts}Payment Options{/ts}</legend>
+                    <div class="crm-public-form-item crm-section pay_later_receipt-section">
+                        <div class="label">&nbsp;</div>
+                        <div class="content">
+                            [x] {$pay_later_text}
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                </fieldset>
+            {/if}
+
+            <div id="billing-payment-block">
+                {include file="CRM/Financial/Form/Payment.tpl" snippet=4}
             </div>
-            {* close div class .memberreg-block *}
+            {include file="CRM/common/paymentBlock.tpl"}
 
             {if $is_monetary and $form.bank_account_number}
                 <div id="payment_notice">
@@ -427,88 +418,88 @@
             {literal}
 
             cj('input[name="soft_credit_type_id"]').on('change', function () {
-              enableHonorType();
+                enableHonorType();
             });
 
             function enableHonorType() {
-              var selectedValue = cj('input[name="soft_credit_type_id"]:checked');
-              if (selectedValue.val() > 0) {
-                cj('#honorType').show();
-              }
-              else {
-                cj('#honorType').hide();
-              }
+                var selectedValue = cj('input[name="soft_credit_type_id"]:checked');
+                if (selectedValue.val() > 0) {
+                    cj('#honorType').show();
+                }
+                else {
+                    cj('#honorType').hide();
+                }
             }
 
             cj('input[id="is_recur"]').on('change', function () {
-              toggleRecur();
+                toggleRecur();
             });
 
             function toggleRecur() {
-              var isRecur = cj('input[id="is_recur"]:checked');
-              var allowAutoRenew = {/literal}'{$allowAutoRenewMembership}'{literal};
-              var quickConfig = {/literal}{$quickConfig}{literal};
-              if (allowAutoRenew && cj("#auto_renew") && quickConfig) {
-                showHideAutoRenew(null);
-              }
-              if (isRecur.val() > 0) {
-                cj('#recurHelp').show();
-                cj('#amount_sum_label').text('{/literal}{ts escape='js'}Regular amount{/ts}{literal}');
-              }
-              else {
-                cj('#recurHelp').hide();
-                cj('#amount_sum_label').text('{/literal}{ts escape='js'}Total amount{/ts}{literal}');
-              }
+                var isRecur = cj('input[id="is_recur"]:checked');
+                var allowAutoRenew = {/literal}'{$allowAutoRenewMembership}'{literal};
+                var quickConfig = {/literal}{$quickConfig}{literal};
+                if (allowAutoRenew && cj("#auto_renew") && quickConfig) {
+                    showHideAutoRenew(null);
+                }
+                if (isRecur.val() > 0) {
+                    cj('#recurHelp').show();
+                    cj('#amount_sum_label').text('{/literal}{ts escape='js'}Regular amount{/ts}{literal}');
+                }
+                else {
+                    cj('#recurHelp').hide();
+                    cj('#amount_sum_label').text('{/literal}{ts escape='js'}Total Amount{/ts}{literal}');
+                }
             }
 
             function pcpAnonymous() {
-              // clear nickname field if anonymous is true
-              if (document.getElementsByName("pcp_is_anonymous")[1].checked) {
-                document.getElementById('pcp_roll_nickname').value = '';
-              }
-              if (!document.getElementsByName("pcp_display_in_roll")[0].checked) {
-                cj('#nickID').hide();
-                cj('#nameID').hide();
-                cj('#personalNoteID').hide();
-              }
-              else {
-                if (document.getElementsByName("pcp_is_anonymous")[0].checked) {
-                  cj('#nameID').show();
-                  cj('#nickID').show();
-                  cj('#personalNoteID').show();
+                // clear nickname field if anonymous is true
+                if (document.getElementsByName("pcp_is_anonymous")[1].checked) {
+                    document.getElementById('pcp_roll_nickname').value = '';
+                }
+                if (!document.getElementsByName("pcp_display_in_roll")[0].checked) {
+                    cj('#nickID').hide();
+                    cj('#nameID').hide();
+                    cj('#personalNoteID').hide();
                 }
                 else {
-                  cj('#nameID').show();
-                  cj('#nickID').hide();
-                  cj('#personalNoteID').hide();
+                    if (document.getElementsByName("pcp_is_anonymous")[0].checked) {
+                        cj('#nameID').show();
+                        cj('#nickID').show();
+                        cj('#personalNoteID').show();
+                    }
+                    else {
+                        cj('#nameID').show();
+                        cj('#nickID').hide();
+                        cj('#personalNoteID').hide();
+                    }
                 }
-              }
             }
 
             CRM.$(function ($) {
-              enableHonorType();
-              toggleRecur();
-              skipPaymentMethod();
+                enableHonorType();
+                toggleRecur();
+                skipPaymentMethod();
             });
 
             CRM.$(function ($) {
-              // highlight price sets
-              function updatePriceSetHighlight() {
-                $('#priceset .price-set-row span').removeClass('highlight');
-                $('#priceset .price-set-row input:checked').parent().addClass('highlight');
-              }
+                // highlight price sets
+                function updatePriceSetHighlight() {
+                    $('#priceset .price-set-row span').removeClass('highlight');
+                    $('#priceset .price-set-row input:checked').parent().addClass('highlight');
+                }
 
-              $('#priceset input[type="radio"]').change(updatePriceSetHighlight);
-              updatePriceSetHighlight();
+                $('#priceset input[type="radio"]').change(updatePriceSetHighlight);
+                updatePriceSetHighlight();
 
-              // Update pledge contribution amount when pledge checkboxes change
-              $("input[name^='pledge_amount']").on('change', function () {
-                var total = 0;
-                $("input[name^='pledge_amount']:checked").each(function () {
-                  total += Number($(this).attr('amount'));
+                // Update pledge contribution amount when pledge checkboxes change
+                $("input[name^='pledge_amount']").on('change', function () {
+                    var total = 0;
+                    $("input[name^='pledge_amount']:checked").each(function () {
+                        total += Number($(this).attr('amount'));
+                    });
+                    $("input[name^='price_']").val(total.toFixed(2));
                 });
-                $("input[name^='price_']").val(total.toFixed(2));
-              });
             });
             {/literal}
         </script>

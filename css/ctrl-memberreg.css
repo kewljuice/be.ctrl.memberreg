@@ -2,42 +2,37 @@
  * CSS for Event registration form
  */
 
-/* REGISTRATION FORM */
+/* Registration Form */
 .memberreg-container {
     background-color: lightgrey;
     padding-top: 20px;
     padding-bottom: 20px;
 }
-
 .memberreg-container .memberreg-preview {
     margin: 20px;
     background-color: lightcoral;
 }
-
 .memberreg-container .memberreg-intro {
     margin: 20px;
     background-color: lightsalmon;
 }
-
 .memberreg-container .memberreg-block {
     margin: 20px;
     background-color: lightgreen;
 }
-
 .memberreg-container .memberreg-block .memberreg-title {
     background-color: lightcyan;
 }
-
 .memberreg-container .memberreg-block .memberreg-content {
     border: solid 2px lightcyan;
 }
-
 .memberreg-container .memberreg-footer {
     margin: 20px;
     background-color: lemonchiffon;
 }
-
 .memberreg-container .memberreg-button {
     margin: 20px;
 }
-
+.memberreg-container .label {
+    color: black;
+}

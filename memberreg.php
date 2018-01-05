@@ -142,8 +142,8 @@ function memberreg_civicrm_buildForm($formName, &$form) {
    */
   if (strpos($formName, 'CRM_Contribute_Form_Contribution_') !== FALSE) {
     CRM_Core_Resources::singleton()
-      // include JS file
-      ->addScriptFile('be.ctrl.memberreg', 'js/ctrl-memberreg.js')
+      // include JS file (uncomment below if needed)
+      // ->addScriptFile('be.ctrl.memberreg', 'js/ctrl-memberreg.js')
       // include CSS file
       ->addStyleFile('be.ctrl.memberreg', 'css/ctrl-memberreg.css');
   }
