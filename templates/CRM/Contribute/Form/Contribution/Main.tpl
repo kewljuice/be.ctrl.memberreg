@@ -195,6 +195,7 @@
                 {/if}
 
                 {* open div class .memberreg-block *}
+                {if $showMainEmail}
                 <div class="memberreg-block" id="memberreg-email">
                     {* open div class .memberreg-title *}
                     <div class="memberreg-title"><h2>{ts domain='be.ctrl.memberreg'}Your email address{/ts}</h2>
@@ -213,6 +214,7 @@
                     </div>
                     {* close div class .memberreg-content *}
                 </div>
+                {/if}
                 {* close div class .memberreg-block *}
 
                 <div id='onBehalfOfOrg' class="crm-public-form-item crm-section">
