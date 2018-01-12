@@ -194,28 +194,26 @@
                     </div>
                 {/if}
 
-                {if $showMainEmail}
-                    {* open div class .memberreg-block *}
-                    <div class="memberreg-block" id="memberreg-email">
-                        {* open div class .memberreg-title *}
-                        <div class="memberreg-title"><h2>{ts domain='be.ctrl.memberreg'}Your email address{/ts}</h2>
-                        </div>
-                        {* open div class .memberreg-content *}
-                        <div class="memberreg-content">
-                            {assign var=n value=email-$bltID}
-                            <div class="crm-public-form-item crm-section {$form.$n.name}-section">
-                                <div class="label">{$form.$n.label}</div>
-                                <div class="content">
-                                    {$form.$n.html}
-                                </div>
-                                <div class="clear"></div>
-                            </div>
-
-                        </div>
-                        {* close div class .memberreg-content *}
+                {* open div class .memberreg-block *}
+                <div class="memberreg-block" id="memberreg-email">
+                    {* open div class .memberreg-title *}
+                    <div class="memberreg-title"><h2>{ts domain='be.ctrl.memberreg'}Your email address{/ts}</h2>
                     </div>
-                    {* close div class .memberreg-block *}
-                {/if}
+                    {* open div class .memberreg-content *}
+                    <div class="memberreg-content">
+                        {assign var=n value=email-$bltID}
+                        <div class="crm-public-form-item crm-section {$form.$n.name}-section">
+                            <div class="label">{$form.$n.label}</div>
+                            <div class="content">
+                                {$form.$n.html}
+                            </div>
+                            <div class="clear"></div>
+                        </div>
+
+                    </div>
+                    {* close div class .memberreg-content *}
+                </div>
+                {* close div class .memberreg-block *}
 
                 <div id='onBehalfOfOrg' class="crm-public-form-item crm-section">
                     {include file="CRM/Contribute/Form/Contribution/OnBehalfOf.tpl"}
