@@ -96,8 +96,6 @@
                 <div class="help">{ts}You have a current Lifetime Membership which does not need to be renewed.{/ts}</div>
             {/if}
 
-
-
                 {if !empty($useForMember) && !$ccid}
                     <div class="crm-public-form-item crm-section">
                         {include file="CRM/Contribute/Form/Contribution/MembershipBlock.tpl" context="makeContribution"}
@@ -122,7 +120,6 @@
                         {include file="CRM/Price/Form/PriceSet.tpl" extends="Contribution"}
                     </div>
                 {/if}
-
 
             {if !$ccid}
                 {crmRegion name='contribution-main-pledge-block'}
@@ -217,9 +214,23 @@
                 {/if}
                 {* close div class .memberreg-block *}
 
-                <div id='onBehalfOfOrg' class="crm-public-form-item crm-section">
-                    {include file="CRM/Contribute/Form/Contribution/OnBehalfOf.tpl"}
-                </div>
+                {* open div class .memberreg-block *}
+                {if isset($form.onbehalf) }
+                    <div class="memberreg-block" id="memberreg-onbehalf">
+                        {* open div class .memberreg-title *}
+                        <div class="memberreg-title">
+                            <h2>{ts domain='be.ctrl.memberreg'}Your company information{/ts}</h2>
+                        </div>
+                        {* open div class .memberreg-content *}
+                        <div class="memberreg-content">
+                            <div id='onBehalfOfOrg' class="crm-public-form-item crm-section">
+                                {include file="CRM/Contribute/Form/Contribution/OnBehalfOf.tpl"}
+                            </div>
+                        </div>
+                        {* close div class .memberreg-content *}
+                    </div>
+                {/if}
+                {* close div class .memberreg-block *}
 
                 {* User account registration option. Displays if enabled for one of the profiles on this page. *}
                 {if $showCMS }
@@ -265,22 +276,25 @@
                 {/if}
 
                 {* open div class .memberreg-block *}
-                <div class="memberreg-block" id="memberreg-pre">
-                    {* open div class .memberreg-title *}
-                    <div class="memberreg-title"><h2>{ts domain='be.ctrl.memberreg'}Your personal information{/ts}</h2>
-                    </div>
-                    {* open div class .memberreg-content *}
-                    <div class="memberreg-content">
-                        <div class="crm-public-form-item crm-group custom_pre_profile-group">
-                            {include file="CRM/UF/Form/Block.tpl" fields=$customPre}
+                {if $customPre}
+                    <div class="memberreg-block" id="memberreg-pre">
+                        {* open div class .memberreg-title *}
+                        <div class="memberreg-title">
+                            <h2>{ts domain='be.ctrl.memberreg'}Your personal information{/ts}</h2>
                         </div>
+                        {* open div class .memberreg-content *}
+                        <div class="memberreg-content">
+                            <div class="crm-public-form-item crm-group custom_pre_profile-group">
+                                {include file="CRM/UF/Form/Block.tpl" fields=$customPre}
+                            </div>
+                        </div>
+                        {* close div class .memberreg-content *}
                     </div>
-                    {* close div class .memberreg-content *}
-                </div>
+                {/if}
                 {* close div class .memberreg-block *}
 
+                {* open div class .memberreg-block *}
                 {if $customPost}
-                    {* open div class .memberreg-block *}
                     <div class="memberreg-block" id="memberreg-post">
                         {* open div class .memberreg-title *}
                         <div class="memberreg-title"><h2>{ts domain='be.ctrl.memberreg'}Your additional data{/ts}</h2>
@@ -293,8 +307,8 @@
                         </div>
                         {* close div class .memberreg-content *}
                     </div>
-                    {* close div class .memberreg-block *}
                 {/if}
+                {* close div class .memberreg-block *}
 
                 {if $isHonor}
                     <fieldset class="crm-public-form-item crm-group pcp-group">
