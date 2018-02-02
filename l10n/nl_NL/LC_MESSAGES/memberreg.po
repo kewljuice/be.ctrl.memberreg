@@ -31,5 +31,8 @@ msgstr "Je aanvullende gegevens"
 msgid "Payment method"
 msgstr "Betaalmethode"
 
-msgid "Membership"
-msgstr "Lidmaatschap"
+msgid "Contribution"
+msgstr "Bijdrage"
+
+#~ msgid "Membership"
+#~ msgstr "Lidmaatschap"

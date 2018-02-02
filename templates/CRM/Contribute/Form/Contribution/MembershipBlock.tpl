@@ -56,7 +56,7 @@
             {* open div class .memberreg-block *}
             <div class="memberreg-block" id="memberreg-member">
                 {* open div class .memberreg-title *}
-                <div class="memberreg-title"><h2>{ts domain='be.ctrl.memberreg'}Membership{/ts}</h2></div>
+                <div class="memberreg-title"><h2>{ts domain='be.ctrl.memberreg'}Contribution{/ts}</h2></div>
                 {* open div class .memberreg-content *}
                 <div class="memberreg-content">
 

@@ -20,5 +20,5 @@ msgstr ""
 msgid "Payment method"
 msgstr ""
 
-msgid "Membership"
+msgid "Contribution"
 msgstr ""
