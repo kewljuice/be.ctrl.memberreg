@@ -17,18 +17,20 @@
     padding: 0 0 0 6px;
 }
 
-#crm-container.crm-public .memberreg-container fieldset legend {
+#crm-container.crm-public .memberreg-container legend {
     float: none;
     font-family: "Lucida", "Lucida Grande", "Trebuchet MS", Tahoma, Verdana, sans-serif;
     font-weight: unset;
     padding: 0;
     font-size: 14px;
+    border: 0;
 }
 
 #crm-container.crm-public .memberreg-container .label {
     width: auto;
     text-align: left;
     font-size: 14px;
+    color: #000000;
 }
 
 #crm-container.crm-public .memberreg-container #crm-submit-buttons {
