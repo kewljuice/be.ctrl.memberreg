@@ -46,6 +46,10 @@ function memberreg_civicrm_uninstall() {
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_enable
  */
 function memberreg_civicrm_enable() {
+  // Assign default parameters.
+  CRM_Core_BAO_Setting::setItem(0, 'memberreg', 'memberreg-css');
+  CRM_Core_BAO_Setting::setItem(0, 'memberreg', 'memberreg-js');
+  // Continue.
   _memberreg_civix_civicrm_enable();
 }
 
@@ -61,12 +65,14 @@ function memberreg_civicrm_disable() {
 /**
  * Implements hook_civicrm_upgrade().
  *
- * @param $op string, the type of operation being performed; 'check' or 'enqueue'
- * @param $queue CRM_Queue_Queue, (for 'enqueue') the modifiable list of pending up upgrade tasks
+ * @param $op string, the type of operation being performed; 'check' or
+ *   'enqueue'
+ * @param $queue CRM_Queue_Queue, (for 'enqueue') the modifiable list of
+ *   pending up upgrade tasks
  *
  * @return mixed
- *   Based on op. for 'check', returns array(boolean) (TRUE if upgrades are pending)
- *                for 'enqueue', returns void
+ *   Based on op. for 'check', returns array(boolean) (TRUE if upgrades are
+ *   pending) for 'enqueue', returns void
  *
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_upgrade
  */
@@ -110,7 +116,7 @@ function memberreg_civicrm_caseTypes(&$caseTypes) {
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_caseTypes
  */
 function memberreg_civicrm_angularModules(&$angularModules) {
-_memberreg_civix_civicrm_angularModules($angularModules);
+  _memberreg_civix_civicrm_angularModules($angularModules);
 }
 
 /**
@@ -141,10 +147,75 @@ function memberreg_civicrm_buildForm($formName, &$form) {
    * https://forum.civicrm.org/index.php?topic=27216.0
    */
   if (strpos($formName, 'CRM_Contribute_Form_Contribution_') !== FALSE) {
-    CRM_Core_Resources::singleton()
-      // include JS file (uncomment below if needed)
-      // ->addScriptFile('be.ctrl.memberreg', 'js/ctrl-memberreg.js')
-      // include CSS file
-      ->addStyleFile('be.ctrl.memberreg', 'css/ctrl-memberreg.css');
+    // include CSS file.
+    if (CRM_Core_BAO_Setting::getItem('memberreg', 'memberreg-css')) {
+      CRM_Core_Resources::singleton()
+        ->addStyleFile('be.ctrl.memberreg', 'css/ctrl-memberreg.css');
+    }
+    // include JS file.
+    if (CRM_Core_BAO_Setting::getItem('memberreg', 'memberreg-js')) {
+      CRM_Core_Resources::singleton()
+        ->addScriptFile('be.ctrl.memberreg', 'js/ctrl-memberreg.js');
+    }
   }
+}
+
+/**
+ * CiviCRM hook navigationMenu
+ */
+function memberreg_civicrm_navigationMenu(&$params) {
+  //  Get the maximum key of $params.
+  $nextKey = (max(array_keys($params)));
+  // Check for Administer navID.
+  $AdministerKey = '';
+  foreach ($params as $k => $v) {
+    if ($v['attributes']['name'] == 'Administer') {
+      $AdministerKey = $k;
+    }
+  }
+  // Check for Parent navID.
+  foreach ($params[$AdministerKey]['child'] as $k => $v) {
+    if ($v['attributes']['name'] == 'CTRL') {
+      $parentKey = $v['attributes']['navID'];
+    }
+  }
+  // If Parent navID doesn't exist create.
+  if (!isset($parentKey)) {
+    // Create parent array
+    $parent = [
+      'attributes' => [
+        'label' => 'CTRL',
+        'name' => 'CTRL',
+        'url' => NULL,
+        'permission' => 'access CiviCRM',
+        'operator' => NULL,
+        'separator' => 0,
+        'parentID' => $AdministerKey,
+        'navID' => $nextKey,
+        'active' => 1,
+      ],
+      'child' => NULL,
+    ];
+    // Add parent to Administer
+    $params[$AdministerKey]['child'][$nextKey] = $parent;
+    $parentKey = $nextKey;
+    $nextKey++;
+  }
+  // Create child(s) array
+  $child = [
+    'attributes' => [
+      'label' => 'MemberReg',
+      'name' => 'ctrl_memberreg',
+      'url' => 'civicrm/ctrl/memberreg',
+      'permission' => 'access CiviCRM',
+      'operator' => NULL,
+      'separator' => 0,
+      'parentID' => $parentKey,
+      'navID' => $nextKey,
+      'active' => 1,
+    ],
+    'child' => NULL,
+  ];
+  // Add child(s) for this extension
+  $params[$AdministerKey]['child'][$parentKey]['child'][$nextKey] = $child;
 }
