@@ -50,19 +50,23 @@
             <br/>
         {/if}
 
-        <div class="help">
+        <!-- <div class="help"> -->
             {* PayPal_Standard sets contribution_mode to 'notify'. We don't know if transaction is successful until we receive the IPN (payment notification) *}
             {if $is_pay_later}
-                <div class="bold">{$pay_later_receipt}</div>
-                {if $is_email_receipt}
-                    <div>
-                        {if $onBehalfEmail AND ($onBehalfEmail neq $email)}
-                            {ts 1=$email 2=$onBehalfEmail}An email confirmation with these payment instructions has been sent to %1 and to %2.{/ts}
-                        {else}
-                            {ts 1=$email}An email confirmation with these payment instructions has been sent to %1.{/ts}
-                        {/if}
-                    </div>
-                {/if}
+                {* open div class .memberreg-preview *}
+                <div class="memberreg-preview">
+                    <div class="bold">{$pay_later_receipt}</div>
+                    {if $is_email_receipt}
+                        <div>
+                            {if $onBehalfEmail AND ($onBehalfEmail neq $email)}
+                                {ts 1=$email 2=$onBehalfEmail}An email confirmation with these payment instructions has been sent to %1 and to %2.{/ts}
+                            {else}
+                                {ts 1=$email}An email confirmation with these payment instructions has been sent to %1.{/ts}
+                            {/if}
+                        </div>
+                    {/if}
+                </div>
+                {* close div class .memberreg-preview *}
             {elseif $contributeMode EQ 'notify' OR ($contributeMode EQ 'direct' && $is_recur) }
                 <div>{ts 1=$paymentProcessor.name}Your contribution has been submitted to %1 for processing. Please print this page for your records.{/ts}</div>
                 {if $is_email_receipt}
@@ -86,7 +90,7 @@
                     </div>
                 {/if}
             {/if}
-        </div>
+        <!-- </div> -->
 
         {* open div class .memberreg-preview *}
         {if $thankyou_text}
