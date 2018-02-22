@@ -25,6 +25,6 @@ Adds custom css and javascript to member registration forms
 
 ## Configuration
 
-- The list of available stylesheets is available at ```"Administer -> CTRL -> MemberReg"``` or **yoursite.org/civicrm/ctrl/memberreg**. 
+- Module configuration is available at ```"Administer -> CTRL -> MemberReg"``` or **yoursite.org/civicrm/ctrl/memberreg**. 
 
 - Activate Stylesheet or Javascript here.
