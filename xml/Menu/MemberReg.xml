@@ -2,7 +2,7 @@
 <menu>
     <item>
         <path>civicrm/ctrl/memberreg</path>
-        <page_callback>CRM_memberreg_Page_memberreg</page_callback>
+        <page_callback>CRM_MemberReg_Page_MemberReg</page_callback>
         <title>memberreg</title>
         <access_arguments>access CiviCRM</access_arguments>
     </item>

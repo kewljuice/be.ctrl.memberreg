@@ -20,7 +20,7 @@
   <compatibility>
     <ver>4.7</ver>
   </compatibility>
-  <comments>Stable</comments>
+  <comments>Follow README.md</comments>
   <civix>
     <namespace>CRM/ctrl/memberreg</namespace>
   </civix>
