@@ -164,8 +164,6 @@ function memberreg_civicrm_buildForm($formName, &$form) {
  * CiviCRM hook navigationMenu
  */
 function memberreg_civicrm_navigationMenu(&$params) {
-  //  Get the maximum key of $params.
-  $nextKey = (max(array_keys($params)));
   // Check for Administer navID.
   $AdministerKey = '';
   foreach ($params as $k => $v) {
@@ -175,7 +173,7 @@ function memberreg_civicrm_navigationMenu(&$params) {
   }
   // Check for Parent navID.
   foreach ($params[$AdministerKey]['child'] as $k => $v) {
-    if ($v['attributes']['name'] == 'CTRL') {
+    if ($k == 'CTRL') {
       $parentKey = $v['attributes']['navID'];
     }
   }
@@ -191,15 +189,13 @@ function memberreg_civicrm_navigationMenu(&$params) {
         'operator' => NULL,
         'separator' => 0,
         'parentID' => $AdministerKey,
-        'navID' => $nextKey,
+        'navID' => 'CTRL',
         'active' => 1,
       ],
       'child' => NULL,
     ];
     // Add parent to Administer
-    $params[$AdministerKey]['child'][$nextKey] = $parent;
-    $parentKey = $nextKey;
-    $nextKey++;
+    $params[$AdministerKey]['child']['CTRL'] = $parent;
   }
   // Create child(s) array
   $child = [
@@ -211,11 +207,11 @@ function memberreg_civicrm_navigationMenu(&$params) {
       'operator' => NULL,
       'separator' => 0,
       'parentID' => $parentKey,
-      'navID' => $nextKey,
+      'navID' => 'memberreg',
       'active' => 1,
     ],
     'child' => NULL,
   ];
   // Add child(s) for this extension
-  $params[$AdministerKey]['child'][$parentKey]['child'][$nextKey] = $child;
+  $params[$AdministerKey]['child']['CTRL']['child']['memberreg'] = $child;
 }

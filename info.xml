@@ -22,6 +22,6 @@
   </compatibility>
   <comments>Follow README.md</comments>
   <civix>
-    <namespace>CRM/ctrl/MemberReg</namespace>
+    <namespace>CRM/ctrl/memberreg</namespace>
   </civix>
 </extension>
