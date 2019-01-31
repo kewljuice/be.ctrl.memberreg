@@ -83,43 +83,107 @@
                 </div>
             {/if}
 
-            {* open div class .memberreg-preview *}
-            <div class="memberreg-preview">
-                <div id="intro_text" class="crm-public-form-item crm-section intro_text-section">
-                    {$intro_text}
+
+            <div class="memberreg-introduction">
+                <div class="layout layout--gutters">
+
+                    {* open div class .memberreg-preview *}
+                    <section class="section memberreg-preview">
+                        <div class="section__wrapper">
+                            <div class="section__content">
+                                <div id="intro_text" class="crm-section intro_text-section">
+                                    {$intro_text}
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    {* close div class .memberreg-preview *}
+
+                    {* start custom intro title *}
+                    <section class="section memberreg-intro">
+                        <div class="section__wrapper">
+                        {if $renewal_mode}
+                            {if $membershipBlock.renewal_title}
+                            <header class="section__header">
+                                <div class="section__title">
+                                    <h2>{$membershipBlock.renewal_title}</h2>
+                                </div>
+                            </header>
+                            {/if}
+                            {if $membershipBlock.renewal_text}
+                            <div class="section__content">
+                                <div id="membership-intro" class="crm-section membership_renewal_intro-section">
+                                    {$membershipBlock.renewal_text}
+                                </div>
+                            </div>
+                            {/if}
+                        {else}
+                            {if $membershipBlock.new_title}
+                            <header class="section__header">
+                                <div class="section__title">
+                                    <h2>{$membershipBlock.new_title}</h2>
+                                </div>
+                            </header>
+                            {/if}
+                            {if $membershipBlock.new_text}
+                            <div class="section__content">
+                                <div id="membership-intro" class="crm-section membership_new_intro-section">
+                                    {$membershipBlock.new_text}
+                                </div>
+                            </div>
+                            {/if}
+                        {/if}
+                        </div>
+                    </section>
+                    {* close custom intro title *}
+
                 </div>
             </div>
-            {* close div class .memberreg-preview *}
 
-            {include file="CRM/common/cidzero.tpl"}
+
+
+                {include file="CRM/common/cidzero.tpl"}
             {if $islifetime or $ispricelifetime }
                 <div class="help">{ts}You have a current Lifetime Membership which does not need to be renewed.{/ts}</div>
             {/if}
 
-                {if !empty($useForMember) && !$ccid}
-                    <div class="crm-public-form-item crm-section">
-                        {include file="CRM/Contribute/Form/Contribution/MembershipBlock.tpl" context="makeContribution"}
-                    </div>
-                {elseif !empty($ccid)}
-                    {if $lineItem && $priceSetID && !$is_quick_config}
-                        <div class="header-dark">
-                            {ts}Contribution Information{/ts}
+
+            {if !empty($useForMember) && !$ccid}
+            <div class="crm-public-form-item crm-section" style="display: none;">
+                {include file="CRM/Contribute/Form/Contribution/MembershipBlock.tpl" context="makeContribution"}
+            </div>
+            {elseif !empty($ccid)}
+            <section class="section">
+                <div class="section__wrapper">
+                {if $lineItem && $priceSetID && !$is_quick_config}
+                    <header class="section__header">
+                        <div class="section__title">
+                            <h2>{ts}Contribution Information{/ts}</h2>
                         </div>
+                    </header>
+                    <div class="section__content">
                         {assign var="totalAmount" value=$pendingAmount}
                         {include file="CRM/Price/Page/LineItem.tpl" context="Contribution"}
-                    {else}
-                        <div class="display-block">
-                            <td class="label">{$form.total_amount.label}</td>
-                            <td><span>{$form.total_amount.html|crmMoney}
-                                    &nbsp;&nbsp;{if $taxAmount}(includes {$taxTerm} of {$taxAmount|crmMoney}){/if}</span>
-                            </td>
-                        </div>
-                    {/if}
+                    </div>
                 {else}
-                    <div id="priceset-div">
-                        {include file="CRM/Price/Form/PriceSet.tpl" extends="Contribution"}
+                    <header class="section__header">
+                        <div class="section__title">
+                            <h2>{$form.total_amount.label}</h2>
+                        </div>
+                    </header>
+                    <div class="section__content">
+                         <span>{$form.total_amount.html|crmMoney}
+                                &nbsp;&nbsp;{if $taxAmount}(includes {$taxTerm} of {$taxAmount|crmMoney}){/if}</span>
                     </div>
                 {/if}
+                </div>
+            </section>
+            {else}
+            <div id="priceset-div">
+                {include file="CRM/Price/Form/PriceSet.tpl" extends="Contribution"}
+            </div>
+            {/if}
+
 
             {if !$ccid}
                 {crmRegion name='contribution-main-pledge-block'}
@@ -128,7 +192,6 @@
                         <div class="crm-public-form-item crm-section {$form.pledge_amount.name}-section">
                             <div class="label">{$form.pledge_amount.label}&nbsp;<span class="crm-marker">*</span></div>
                             <div class="content">{$form.pledge_amount.html}</div>
-                            <div class="clear"></div>
                         </div>
                     {else}
                         <div class="crm-public-form-item crm-section {$form.is_pledge.name}-section">
@@ -141,7 +204,6 @@
                                 {$form.pledge_frequency_unit.html}<span id="pledge_installments_num">&nbsp;{ts}for{/ts}
                                     &nbsp;{$form.pledge_installments.html}&nbsp;{ts}installments.{/ts}</span>
                             </div>
-                            <div class="clear"></div>
                             {if $start_date_editable}
                                 {if $is_date}
                                     <div class="label">{$form.start_date.label}</div>
@@ -154,7 +216,6 @@
                                 <div class="label">{$form.start_date.label}</div>
                                 <div class="content">{$start_date_display|date_format}</div>
                             {/if}
-                            <div class="clear"></div>
                         </div>
                     {/if}
                 {/if}
@@ -180,14 +241,12 @@
                                 {$recurringHelpText}
                             </div>
                         </div>
-                        <div class="clear"></div>
                     </div>
                 {/if}
                 {if $pcpSupporterText}
                     <div class="crm-public-form-item crm-section pcpSupporterText-section">
                         <div class="label">&nbsp;</div>
                         <div class="content">{$pcpSupporterText}</div>
-                        <div class="clear"></div>
                     </div>
                 {/if}
 
@@ -205,7 +264,6 @@
                             <div class="content">
                                 {$form.$n.html}
                             </div>
-                            <div class="clear"></div>
                         </div>
 
                     </div>
@@ -235,25 +293,27 @@
                 {* User account registration option. Displays if enabled for one of the profiles on this page. *}
                 {if $showCMS }
                     {* open div class .memberreg-block *}
-                    <div class="memberreg-block" id="memberreg-user">
-                        {* open div class .memberreg-title *}
-                        <div class="memberreg-title"><h2>{ts domain='be.ctrl.memberreg'}Your website login{/ts}</h2>
-                        </div>
-                        {* open div class .memberreg-content *}
-                        <div class="memberreg-content">
-                            <div class="crm-public-form-item crm-section cms_user-section">
-                                {include file="CRM/common/CMSUser.tpl"}
+                    <section class="section section--memberreg-block" id="memberreg-user">
+                        <div class="section__wrapper">
+                            <header class="section__header">
+                                <div class="section__title">
+                                    <h2>{ts domain='be.ctrl.memberreg'}Your website login{/ts}</h2>
+                                </div>
+                            </header>
+                            <div class="section__content">
+                                <div class="crm-public-form-item crm-section cms_user-section">
+                                    {include file="CRM/common/CMSUser.tpl"}
+                                </div>
                             </div>
                         </div>
-                        {* close div class .memberreg-content *}
-                    </div>
+                    </section>
                     {* close div class .memberreg-block *}
                 {/if}
 
-                <div class="crm-public-form-item crm-section premium_block-section">
+                {*<div class="crm-public-form-item crm-section premium_block-section">*}
                     {include file="CRM/Contribute/Form/Contribution/PremiumBlock.tpl" context="makeContribution"}
-                </div>
-                {if $honoreeProfileFields|@count}
+                {*</div>*}
+                {if $honoreeProfileFields && $honoreeProfileFields|@count}
                     <fieldset class="crm-public-form-item crm-group honor_block-group">
                         {crmRegion name="contribution-soft-credit-block"}
                             <legend>{$honor_block_title}</legend>
@@ -275,40 +335,53 @@
                     </fieldset>
                 {/if}
 
+
+
                 {* open div class .memberreg-block *}
                 {if $customPre}
-                    <div class="memberreg-block" id="memberreg-pre">
-                        {* open div class .memberreg-title *}
-                        <div class="memberreg-title">
-                            <h2>{ts domain='be.ctrl.memberreg'}Your personal information{/ts}</h2>
-                        </div>
-                        {* open div class .memberreg-content *}
-                        <div class="memberreg-content">
-                            <div class="crm-public-form-item crm-group custom_pre_profile-group">
-                                {include file="CRM/UF/Form/Block.tpl" fields=$customPre}
+                    <section class="section memberreg-personal-details-form" id="memberreg-pre">
+                        <div class="section__wrapper">
+                            {* open div class .memberreg-title *}
+                            <header class="section__header">
+                                <div class="section__title">
+                                    <h2>{ts domain='be.ctrl.memberreg'}Your personal information{/ts}</h2>
+                                </div>
+                            </header>
+                            {* open div class .memberreg-content *}
+                            <div class="section__content">
+                                <div class="crm-public-form-item crm-group custom_pre_profile-group">
+                                    {include file="CRM/UF/Form/Block.tpl" fields=$customPre}
+                                </div>
                             </div>
+                            {* close div class .memberreg-content *}
                         </div>
-                        {* close div class .memberreg-content *}
-                    </div>
+                    </section>
                 {/if}
                 {* close div class .memberreg-block *}
 
                 {* open div class .memberreg-block *}
                 {if $customPost}
-                    <div class="memberreg-block" id="memberreg-post">
+                    <section class="section memberreg-personal-details-form" id="memberreg-post">
+                        <div class="section__wrapper">
                         {* open div class .memberreg-title *}
-                        <div class="memberreg-title"><h2>{ts domain='be.ctrl.memberreg'}Your additional data{/ts}</h2>
-                        </div>
-                        {* open div class .memberreg-content *}
-                        <div class="memberreg-content">
-                            <div class="crm-public-form-item crm-group custom_post_profile-group">
-                                {include file="CRM/UF/Form/Block.tpl" fields=$customPost}
+                            <header class="section__header">
+                                <div class="section__title">
+                                    <h2>{ts domain='be.ctrl.memberreg'}Your additional data{/ts}</h2>
+                                </div>
+                            </header>
+                            {* open div class .memberreg-content *}
+                            <div class="section__content">
+                                <div class="crm-public-form-item crm-group custom_post_profile-group">
+                                    {include file="CRM/UF/Form/Block.tpl" fields=$customPost}
+                                </div>
                             </div>
-                        </div>
                         {* close div class .memberreg-content *}
-                    </div>
+                        </div>
+                    </section>
                 {/if}
                 {* close div class .memberreg-block *}
+
+
 
                 {if $isHonor}
                     <fieldset class="crm-public-form-item crm-group pcp-group">
@@ -318,20 +391,17 @@
                                     {$form.pcp_display_in_roll.html} &nbsp;
                                     {$form.pcp_display_in_roll.label}
                                 </div>
-                                <div class="clear"></div>
                             </div>
                             <div id="nameID" class="crm-public-form-item crm-section is_anonymous-section">
                                 <div class="content">
                                     {$form.pcp_is_anonymous.html}
                                 </div>
-                                <div class="clear"></div>
                             </div>
                             <div id="nickID" class="crm-public-form-item crm-section pcp_roll_nickname-section">
                                 <div class="label">{$form.pcp_roll_nickname.label}</div>
                                 <div class="content">{$form.pcp_roll_nickname.html}
                                     <div class="description">{ts}Enter the name you want listed with this contribution. You can use a nick name like 'The Jones Family' or 'Sarah and Sam'.{/ts}</div>
                                 </div>
-                                <div class="clear"></div>
                             </div>
                             <div id="personalNoteID" class="crm-public-form-item crm-section pcp_personal_note-section">
                                 <div class="label">{$form.pcp_personal_note.label}</div>
@@ -339,7 +409,6 @@
                                     {$form.pcp_personal_note.html}
                                     <div class="description">{ts}Enter a message to accompany this contribution.{/ts}</div>
                                 </div>
-                                <div class="clear"></div>
                             </div>
                         </div>
                     </fieldset>
@@ -353,22 +422,22 @@
                 <!-- <fieldset class="crm-public-form-item crm-group payment_options-group" style="display:none;"> -->
                 <div class="crm-public-form-item crm-group payment_options-group" style="display:none;">
                     {* open div class .memberreg-block *}
-                    <div class="memberreg-block" id="memberreg-payment">
-                        {* open div class .memberreg-title *}
-                        <div class="memberreg-title"><h2>{ts domain='be.ctrl.memberreg'}Payment method{/ts}</h2></div>
-                        {* open div class .memberreg-content *}
-                        <div class="memberreg-content">
-
-                            <!-- <legend>{ts}Payment Options{/ts}</legend> -->
-                            <div class="crm-public-form-item crm-section payment_processor-section">
-                                <div class="label">{$form.payment_processor_id.label}</div>
-                                <div class="content">{$form.payment_processor_id.html}</div>
-                                <div class="clear"></div>
+                    <section class="section memberreg-payment" id="memberreg-payment">
+                        <div class="section__wrapper">
+                            <header class="section__header">
+                                <div class="section__title">
+                                    <h2>{ts domain='be.ctrl.memberreg'}Payment method{/ts}</h2>
+                                </div>
+                            </header>
+                            <div class="section__content">
+                                <!-- <legend>{ts}Payment Options{/ts}</legend> -->
+                                <div class="crm-public-form-item crm-section payment_processor-section">
+                                    <div class="label">{$form.payment_processor_id.label}</div>
+                                    <div class="content">{$form.payment_processor_id.html}</div>
+                                </div>
                             </div>
-
                         </div>
-                        {* close div class .memberreg-content *}
-                    </div>
+                    </section>
                     {* close div class .memberreg-block *}
                 </div>
                 <!-- </fieldset> -->
@@ -382,15 +451,12 @@
                         <div class="content">
                             [x] {$pay_later_text}
                         </div>
-                        <div class="clear"></div>
+
                     </div>
                 </fieldset>
             {/if}
 
-            <div id="billing-payment-block">
-                {include file="CRM/Financial/Form/Payment.tpl" snippet=4}
-            </div>
-            {include file="CRM/common/paymentBlock.tpl"}
+            {include file="CRM/Core/BillingBlockWrapper.tpl"}
 
             {if $is_monetary and $form.bank_account_number}
                 <div id="payment_notice">
@@ -401,27 +467,38 @@
                 </div>
             {/if}
 
+
             {if $isCaptcha}
                 {include file='CRM/common/ReCAPTCHA.tpl'}
             {/if}
 
-            {if $footer_text}
-                {* open div class .memberreg-footer *}
-                <div class="memberreg-footer">
-                    <div id="footer_text" class="crm-public-form-item crm-section contribution_footer_text-section">
-                        <p>{$footer_text}</p>
-                    </div>
-                </div>
-                {* close div class .memberreg-footer *}
-            {/if}
+            <section class="section memberreg-personal-details-form">
+                <div class="section__wrapper">
 
-            {* open div class .memberreg-button *}
-            <div class="memberreg-button">
-                <div id="crm-submit-buttons" class="crm-submit-buttons">
-                    {include file="CRM/common/formButtons.tpl" location="bottom"}
+                    {if $footer_text}
+                    <div class="section__content">
+                        {* open div class .memberreg-footer *}
+                        <div class="memberreg-footer helprow-post">
+                            <div id="footer_text" class="crm-section contribution_footer_text-section description">
+                                {$footer_text}
+                            </div>
+                        </div>
+                        {* close div class .memberreg-footer *}
+                    </div>
+                    {/if}
+
+                    <div class="section__footer">
+                        {* open div class .memberreg-button *}
+                        <div class="memberreg-button">
+                            <div id="crm-submit-buttons" class="crm-submit-buttons">
+                                {include file="CRM/common/formButtons.tpl" location="bottom"}
+                            </div>
+                        </div>
+                        {* close div class .memberreg-button *}
+                    </div>
+
                 </div>
-            </div>
-            {* close div class .memberreg-button *}
+            </section>
 
         </div>
         <script type="text/javascript">

@@ -35,6 +35,10 @@
 
     <div class="crm-contribution-page-id-{$contributionPageID} crm-block crm-contribution-thankyou-form-block">
 
+        <section class="section">
+            <div class="section__wrapper">
+                <div class="section__content">
+
         {* Show link to Tell a Friend (CRM-2153) *}
         {if $friendText}
             <div id="tell-a-friend" class="crm-section friend_link-section">
@@ -331,11 +335,11 @@
                         </div>
                         <div class="crm-section no-label billing_name-section">
                             <div class="content">{$billingName}</div>
-                            <div class="clear"></div>
+                            
                         </div>
                         <div class="crm-section no-label billing_address-section">
                             <div class="content">{$address|nl2br}</div>
-                            <div class="clear"></div>
+                            
                         </div>
                     </div>
                 {/if}
@@ -347,7 +351,7 @@
                     </div>
                     <div class="crm-section no-label contributor_email-section">
                         <div class="content">{$email}</div>
-                        <div class="clear"></div>
+                        
                     </div>
                 </div>
             {/if}
@@ -376,7 +380,7 @@
                             <div class="content">{$credit_card_type}</div>
                             <div class="content">{$credit_card_number}</div>
                             <div class="content">{ts}Expires{/ts}: {$credit_card_exp_date|truncate:7:''|crmDate}</div>
-                            <div class="clear"></div>
+                            
                         </div>
                     {/if}
                 </div>
@@ -415,6 +419,15 @@
             {capture assign=contributionUrl}{crmURL p='civicrm/contribute/transact' q="$qParams" a=1 fe=1 h=1}{/capture}
             {include file="CRM/common/SocialNetwork.tpl" url=$contributionUrl title=$title pageURL=$contributionUrl}
         {/if}
+
+
+
+                </div>
+
+            </div>
+        </section>
+
+
     </div>
 
 

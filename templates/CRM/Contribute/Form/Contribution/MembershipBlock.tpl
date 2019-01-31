@@ -29,36 +29,18 @@
     <div id="priceset">
         <!-- <fieldset> -->
 
-            {* start custom intro title *}
-            <div class="memberreg-intro">
-                {if $renewal_mode}
-                    {if $membershipBlock.renewal_title}
-                        <legend>{$membershipBlock.renewal_title}</legend>
-                    {/if}
-                    {if $membershipBlock.renewal_text}
-                        <div id="membership-intro" class="crm-section membership_renewal_intro-section">
-                            {$membershipBlock.renewal_text}
-                        </div>
-                    {/if}
-                {else}
-                    {if $membershipBlock.new_title}
-                        <legend>{$membershipBlock.new_title}</legend>
-                    {/if}
-                    {if $membershipBlock.new_text}
-                        <div id="membership-intro" class="crm-section membership_new_intro-section">
-                            {$membershipBlock.new_text}
-                        </div>
-                    {/if}
-                {/if}
-            </div>
-            {* close custom intro title *}
-
             {* open div class .memberreg-block *}
-            <div class="memberreg-block" id="memberreg-member">
+            <section class="section section--memberreg" id="memberreg-member">
+                <div class="section__wrapper">
+
                 {* open div class .memberreg-title *}
-                <div class="memberreg-title"><h2>{ts domain='be.ctrl.memberreg'}Contribution{/ts}</h2></div>
+                    <header class="section__header">
+                        <div class="section__title">
+                            <h2>{ts domain='be.ctrl.memberreg'}Contribution{/ts}</h2>
+                        </div>
+                    </header>
                 {* open div class .memberreg-content *}
-                <div class="memberreg-content">
+                    <div class="section__content">
 
                     {if !empty($membershipTypes)}
                         {foreach from=$membershipTypes item=row}
@@ -91,19 +73,26 @@
                     {include file="CRM/Price/Form/PriceSet.tpl" extends="Membership"}
                 </div>
                 {* close div class .memberreg-content *}
-            </div>
+                </div>
+            </section>
             {* close div class .memberreg-block *}
 
         <!-- </fieldset> -->
     </div>
 {elseif $lineItem and $priceSetID AND !$is_quick_config}
   {assign var="totalAmount" value=$amount}
-  <div class="header-dark">
-  {ts}Membership Fee{/ts}
-  </div>
-  <div class="display-block">
-    {include file="CRM/Price/Page/LineItem.tpl" context="Membership"}
-  </div>
+    <section class="section">
+        <div class="section__wrapper">
+            <header class="section__header">
+                <div class="section__title">
+                    <h2>{ts}Membership Fee{/ts}</h2>
+                </div>
+            </header>
+            <div class="section__content">
+                {include file="CRM/Price/Page/LineItem.tpl" context="Membership"}
+            </div>
+        </div>
+    </section>
 {/if}
 </div>
 {literal}
@@ -180,6 +169,7 @@ CRM.$(function($) {
 
 {if $membershipBlock AND $is_quick_config}
 {if  $context neq "makeContribution" }
+    {*
    <div class="header-dark">
         {if $renewal_mode }
                 {if $membershipBlock.renewal_title}
@@ -195,67 +185,15 @@ CRM.$(function($) {
                 {/if}
         {/if}
     </div>
+    *}
 {/if}
  {strip}
-        <table id="membership-listings">
-        {foreach from=$membershipTypes item=row}
-        <tr {if $context EQ "makeContribution"}class="odd-row" {/if}valign="top">
-            {if $showRadio }
-                {assign var="pid" value=$row.id}
-                <td style="width: 1em;">{$form.selectMembership.$pid.html}</td>
-            {else}
-                <td>&nbsp;</td>
-            {/if}
-           <td style="width: auto;">
-                <span class="bold">{$row.name} &nbsp;
-                {if ($membershipBlock.display_min_fee AND $context EQ "makeContribution") AND $row.minimum_fee GT 0 }
-                    {if $is_separate_payment OR ! $form.amount.label}
-                        &ndash; {$row.minimum_fee|crmMoney}
-                    {else}
-                        {ts 1=$row.minimum_fee|crmMoney}(contribute at least %1 to be eligible for this membership){/ts}
-                    {/if}
-                {/if}
-                </span><br />
-                {$row.description} &nbsp;
-           </td>
 
-            <td style="width: auto;">
-              {* Check if there is an existing membership of this type (current_membership NOT empty) and if the end-date is prior to today. *}
-              {if array_key_exists( 'current_membership', $row ) AND $context EQ "makeContribution" }
-                  {if $row.current_membership}
-                        {if $row.current_membership|date_format:"%Y%m%d" LT $smarty.now|date_format:"%Y%m%d"}
-                            <br /><em>{ts 1=$row.current_membership|crmDate 2=$row.name}Your <strong>%2</strong> membership expired on %1.{/ts}</em>
-                        {else}
-                            <br /><em>{ts 1=$row.current_membership|crmDate 2=$row.name}Your <strong>%2</strong> membership expires on %1.{/ts}</em>
-                        {/if}
-                  {else}
-                    {ts 1=$row.name}Your <strong>%1</strong> membership does not expire (you do not need to renew that membership).{/ts}<br />
-                  {/if}
-              {else}
-                &nbsp;
-              {/if}
-           </td>
-        </tr>
+     {foreach from=$membershipTypes item=row}
+         <p>{$row.description}</p>
+     {/foreach}
 
-        {/foreach}
-      {if isset($form.auto_renew) }
-          <tr id="allow_auto_renew">
-          <td style="width: auto;">{$form.auto_renew.html}</td>
-          <td style="width: auto;">
-              {$form.auto_renew.label}
-          </td>
-          </tr>
-        {/if}
-        {if $showRadio}
-            {if $showRadioNoThanks } {* Provide no-thanks option when Membership signup is not required - per membership block configuration. *}
-            <tr class="odd-row">
-              <td>{$form.selectMembership.no_thanks.html}</td>
-              <td colspan="2"><strong>{ts}No thank you{/ts}</strong></td>
-            </tr>
-            {/if}
-        {/if}
-        </table>
-    {/strip}
+  {/strip}
 {/if}
 {* Include JS for auto renew membership if priceset is Quick Config*}
 {if $membershipBlock AND $quickConfig}
