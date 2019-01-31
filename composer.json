@@ -1,0 +1,8 @@
+{
+  "name": "ctrl/memberreg",
+  "description": "CiviCRM member registration extension",
+  "type": "civicrm-extension",
+  "keywords": [
+    "CiviCRM"
+  ]
+}
