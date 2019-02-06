@@ -2,6 +2,9 @@
   "name": "kewljuice/be.ctrl.memberreg",
   "description": "CiviCRM member registration extension",
   "type": "civicrm-extension",
+  "require": {
+    "composer/installers": "~1.0"
+  },
   "keywords": [
     "CiviCRM"
   ]
