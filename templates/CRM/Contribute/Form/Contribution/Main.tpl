@@ -1,8 +1,8 @@
 {*
  +--------------------------------------------------------------------+
- | CiviCRM version 4.7                                                |
+ | CiviCRM version 5                                                  |
  +--------------------------------------------------------------------+
- | Copyright CiviCRM LLC (c) 2004-2017                                |
+ | Copyright CiviCRM LLC (c) 2004-2019                                |
  +--------------------------------------------------------------------+
  | This file is a part of CiviCRM.                                    |
  |                                                                    |
@@ -36,34 +36,33 @@
     {literal}
         <script type="text/javascript">
 
-            // Putting these functions directly in template so they are available for standalone forms
-            function useAmountOther() {
-                var priceset = {/literal}{if $contriPriceset}'{$contriPriceset}'
-                {else}0{/if}{literal};
+          // Putting these functions directly in template so they are available for standalone forms
+          function useAmountOther() {
+            var priceset = {/literal}{if $contriPriceset}'{$contriPriceset}'
+              {else}0{/if}{literal};
 
-                for (i = 0; i < document.Main.elements.length; i++) {
-                    element = document.Main.elements[i];
-                    if (element.type == 'radio' && element.name == priceset) {
-                        if (element.value == '0') {
-                            element.click();
-                        }
-                        else {
-                            element.checked = false;
-                        }
-                    }
+            for (i = 0; i < document.Main.elements.length; i++) {
+              element = document.Main.elements[i];
+              if (element.type == 'radio' && element.name == priceset) {
+                if (element.value == '0') {
+                  element.click();
+                } else {
+                  element.checked = false;
                 }
+              }
             }
+          }
 
-            function clearAmountOther() {
-                var priceset = {/literal}{if $priceset}'#{$priceset}'
-                {else}0{/if}{literal}
-                if (priceset) {
-                    cj(priceset).val('');
-                    cj(priceset).blur();
-                }
-                if (document.Main.amount_other == null) return; // other_amt field not present; do nothing
-                document.Main.amount_other.value = "";
+          function clearAmountOther() {
+            var priceset = {/literal}{if $priceset}'#{$priceset}'
+              {else}0{/if}{literal}
+            if (priceset) {
+              cj(priceset).val('');
+              cj(priceset).blur();
             }
+            if (document.Main.amount_other == null) return; // other_amt field not present; do nothing
+            document.Main.amount_other.value = "";
+          }
 
         </script>
     {/literal}
@@ -71,6 +70,15 @@
         {if $action & 1024}
             {include file="CRM/Contribute/Form/Contribution/PreviewHeader.tpl"}
         {/if}
+
+    {if $displayCaptchaWarning}
+        <div class="messages status no-popup">
+            {ts}To display reCAPTCHA on form you must get an API key from
+                <br/>
+                <a href='https://www.google.com/recaptcha/admin/create'>https://www.google.com/recaptcha/admin/create</a>
+            {/ts}
+        </div>
+    {/if}
 
         {include file="CRM/common/TrackingFields.tpl"}
         <div class="crm-contribution-page-id-{$contributionPageID} crm-block crm-contribution-main-form-block">
@@ -83,107 +91,126 @@
                 </div>
             {/if}
 
-
             <div class="memberreg-introduction">
                 <div class="layout layout--gutters">
 
                     {* open div class .memberreg-preview *}
-                    <section class="section memberreg-preview">
-                        <div class="section__wrapper">
-                            <div class="section__content">
-                                <div id="intro_text" class="crm-section intro_text-section">
-                                    {$intro_text}
+                    {if $intro_text}
+                        <section class="section memberreg-preview">
+                            <div class="section__wrapper">
+                                <div class="section__content">
+                                    <div id="intro_text" class="crm-public-form-item crm-section intro_text-section">
+                                        {$intro_text}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </section>
+                        </section>
+                    {/if}
                     {* close div class .memberreg-preview *}
 
                     {* start custom intro title *}
-                    <section class="section memberreg-intro">
-                        <div class="section__wrapper">
-                        {if $renewal_mode}
-                            {if $membershipBlock.renewal_title}
-                            <header class="section__header">
-                                <div class="section__title">
-                                    <h2>{$membershipBlock.renewal_title}</h2>
-                                </div>
-                            </header>
-                            {/if}
-                            {if $membershipBlock.renewal_text}
-                            <div class="section__content">
-                                <div id="membership-intro" class="crm-section membership_renewal_intro-section">
-                                    {$membershipBlock.renewal_text}
-                                </div>
+                    {if $renewal_mode}
+                        <section class="section memberreg-intro">
+                            <div class="section__wrapper">
+                                {if $membershipBlock.renewal_title}
+                                    <header class="section__header">
+                                        <div class="section__title">
+                                            <h2>{$membershipBlock.renewal_title}</h2>
+                                        </div>
+                                    </header>
+                                {/if}
+                                {if $membershipBlock.renewal_text}
+                                    <div class="section__content">
+                                        <div id="membership-intro" class="crm-section membership_renewal_intro-section">
+                                            {$membershipBlock.renewal_text}
+                                        </div>
+                                    </div>
+                                {/if}
                             </div>
-                            {/if}
-                        {else}
-                            {if $membershipBlock.new_title}
-                            <header class="section__header">
-                                <div class="section__title">
-                                    <h2>{$membershipBlock.new_title}</h2>
+                        </section>
+                    {else}
+                        {if $membershipBlock.new_title}
+                            <section class="section memberreg-intro">
+                                <div class="section__wrapper">
+                                    <header class="section__header">
+                                        <div class="section__title">
+                                            <h2>{$membershipBlock.new_title}</h2>
+                                        </div>
+                                    </header>
                                 </div>
-                            </header>
-                            {/if}
-                            {if $membershipBlock.new_text}
-                            <div class="section__content">
-                                <div id="membership-intro" class="crm-section membership_new_intro-section">
-                                    {$membershipBlock.new_text}
-                                </div>
-                            </div>
-                            {/if}
+                            </section>
                         {/if}
-                        </div>
-                    </section>
+                        {if $membershipBlock.new_text}
+                            <section class="section memberreg-intro">
+                                <div class="section__wrapper">
+                                    <div class="section__content">
+                                        <div id="membership-intro" class="crm-section membership_new_intro-section">
+                                            {$membershipBlock.new_text}
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        {/if}
+                    {/if}
                     {* close custom intro title *}
 
                 </div>
             </div>
 
-
-
-                {include file="CRM/common/cidzero.tpl"}
+            {include file="CRM/common/cidzero.tpl"}
             {if $islifetime or $ispricelifetime }
                 <div class="help">{ts}You have a current Lifetime Membership which does not need to be renewed.{/ts}</div>
             {/if}
 
-
             {if !empty($useForMember) && !$ccid}
-            <div class="crm-public-form-item crm-section" style="display: none;">
-                {include file="CRM/Contribute/Form/Contribution/MembershipBlock.tpl" context="makeContribution"}
-            </div>
-            {elseif !empty($ccid)}
-            <section class="section">
-                <div class="section__wrapper">
-                {if $lineItem && $priceSetID && !$is_quick_config}
-                    <header class="section__header">
-                        <div class="section__title">
-                            <h2>{ts}Contribution Information{/ts}</h2>
-                        </div>
-                    </header>
-                    <div class="section__content">
-                        {assign var="totalAmount" value=$pendingAmount}
-                        {include file="CRM/Price/Page/LineItem.tpl" context="Contribution"}
-                    </div>
-                {else}
-                    <header class="section__header">
-                        <div class="section__title">
-                            <h2>{$form.total_amount.label}</h2>
-                        </div>
-                    </header>
-                    <div class="section__content">
-                         <span>{$form.total_amount.html|crmMoney}
-                                &nbsp;&nbsp;{if $taxAmount}(includes {$taxTerm} of {$taxAmount|crmMoney}){/if}</span>
-                    </div>
-                {/if}
+                <div class="crm-public-form-item crm-section">
+                    {include file="CRM/Contribute/Form/Contribution/MembershipBlock.tpl" context="makeContribution"}
                 </div>
-            </section>
+            {elseif !empty($ccid)}
+                <section class="section">
+                    <div class="section__wrapper">
+                        {if $lineItem && $priceSetID && !$is_quick_config}
+                            <header class="section__header">
+                                <div class="section__title">
+                                    <h2>{ts}Contribution Information{/ts}</h2>
+                                </div>
+                            </header>
+                            <div class="section__content">
+                                {assign var="totalAmount" value=$pendingAmount}
+                                {include file="CRM/Price/Page/LineItem.tpl" context="Contribution"}
+                            </div>
+                        {else}
+                            <header class="section__header">
+                                <div class="section__title">
+                                    <h2>{$form.total_amount.label}</h2>
+                                </div>
+                            </header>
+                            <div class="section__content">
+                         <span>{$form.total_amount.html|crmMoney}
+                                &nbsp;&nbsp;{if $taxAmount}{ts 1=$taxTerm 2=$taxAmount|crmMoney}(includes %1 of %2){/ts}{/if}</span>
+                            </div>
+                        {/if}
+                    </div>
+                </section>
             {else}
-            <div id="priceset-div">
-                {include file="CRM/Price/Form/PriceSet.tpl" extends="Contribution"}
-            </div>
-            {/if}
+                <section class="section">
+                    <div class="section__wrapper">
 
+                        <header class="section__header">
+                            <div class="section__title">
+                                <h2>{ts domain='be.ctrl.memberreg'}Contribution{/ts}</h2>
+                            </div>
+                        </header>
+
+                        <div class="section__content">
+                            <div id="priceset-div">
+                                {include file="CRM/Price/Form/PriceSet.tpl" extends="Contribution"}
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
+            {/if}
 
             {if !$ccid}
                 {crmRegion name='contribution-main-pledge-block'}
@@ -192,6 +219,7 @@
                         <div class="crm-public-form-item crm-section {$form.pledge_amount.name}-section">
                             <div class="label">{$form.pledge_amount.label}&nbsp;<span class="crm-marker">*</span></div>
                             <div class="content">{$form.pledge_amount.html}</div>
+                            <div class="clear"></div>
                         </div>
                     {else}
                         <div class="crm-public-form-item crm-section {$form.is_pledge.name}-section">
@@ -201,9 +229,9 @@
                                 {if $is_pledge_interval}
                                     {$form.pledge_frequency_interval.html}&nbsp;
                                 {/if}
-                                {$form.pledge_frequency_unit.html}<span id="pledge_installments_num">&nbsp;{ts}for{/ts}
-                                    &nbsp;{$form.pledge_installments.html}&nbsp;{ts}installments.{/ts}</span>
+                                {$form.pledge_frequency_unit.html}<span id="pledge_installments_num">&nbsp;{ts}for{/ts}&nbsp;{$form.pledge_installments.html}&nbsp;{ts}installments.{/ts}</span>
                             </div>
+                            <div class="clear"></div>
                             {if $start_date_editable}
                                 {if $is_date}
                                     <div class="label">{$form.start_date.label}</div>
@@ -216,6 +244,7 @@
                                 <div class="label">{$form.start_date.label}</div>
                                 <div class="content">{$start_date_display|date_format}</div>
                             {/if}
+                            <div class="clear"></div>
                         </div>
                     {/if}
                 {/if}
@@ -235,40 +264,44 @@
                                 {$form.frequency_unit.html}
                             {/if}
                             {if $is_recur_installments}
-                                <span id="recur_installments_num">{ts}for{/ts} {$form.installments.html} {$form.installments.label}</span>
+                                <span id="recur_installments_num">
+          {ts}for{/ts} {$form.installments.html} {$form.installments.label}
+          </span>
                             {/if}
                             <div id="recurHelp" class="description">
                                 {$recurringHelpText}
                             </div>
                         </div>
+                        <div class="clear"></div>
                     </div>
                 {/if}
                 {if $pcpSupporterText}
                     <div class="crm-public-form-item crm-section pcpSupporterText-section">
                         <div class="label">&nbsp;</div>
                         <div class="content">{$pcpSupporterText}</div>
+                        <div class="clear"></div>
                     </div>
                 {/if}
 
                 {* open div class .memberreg-block *}
                 {if $showMainEmail}
-                <div class="memberreg-block" id="memberreg-email">
-                    {* open div class .memberreg-title *}
-                    <div class="memberreg-title"><h2>{ts domain='be.ctrl.memberreg'}Your email address{/ts}</h2>
-                    </div>
-                    {* open div class .memberreg-content *}
-                    <div class="memberreg-content">
-                        {assign var=n value=email-$bltID}
-                        <div class="crm-public-form-item crm-section {$form.$n.name}-section">
-                            <div class="label">{$form.$n.label}</div>
-                            <div class="content">
-                                {$form.$n.html}
-                            </div>
+                    <div class="memberreg-block" id="memberreg-email">
+                        {* open div class .memberreg-title *}
+                        <div class="memberreg-title"><h2>{ts domain='be.ctrl.memberreg'}Your email address{/ts}</h2>
                         </div>
+                        {* open div class .memberreg-content *}
+                        <div class="memberreg-content">
+                            {assign var=n value=email-$bltID}
+                            <div class="crm-public-form-item crm-section {$form.$n.name}-section">
+                                <div class="label">{$form.$n.label}</div>
+                                <div class="content">
+                                    {$form.$n.html}
+                                </div>
+                            </div>
 
+                        </div>
+                        {* close div class .memberreg-content *}
                     </div>
-                    {* close div class .memberreg-content *}
-                </div>
                 {/if}
                 {* close div class .memberreg-block *}
 
@@ -309,10 +342,9 @@
                     </section>
                     {* close div class .memberreg-block *}
                 {/if}
-
-                {*<div class="crm-public-form-item crm-section premium_block-section">*}
+                <div class="crm-public-form-item crm-section premium_block-section">
                     {include file="CRM/Contribute/Form/Contribution/PremiumBlock.tpl" context="makeContribution"}
-                {*</div>*}
+                </div>
                 {if $honoreeProfileFields && $honoreeProfileFields|@count}
                     <fieldset class="crm-public-form-item crm-group honor_block-group">
                         {crmRegion name="contribution-soft-credit-block"}
@@ -334,8 +366,6 @@
                         </div>
                     </fieldset>
                 {/if}
-
-
 
                 {* open div class .memberreg-block *}
                 {if $customPre}
@@ -363,7 +393,7 @@
                 {if $customPost}
                     <section class="section memberreg-personal-details-form" id="memberreg-post">
                         <div class="section__wrapper">
-                        {* open div class .memberreg-title *}
+                            {* open div class .memberreg-title *}
                             <header class="section__header">
                                 <div class="section__title">
                                     <h2>{ts domain='be.ctrl.memberreg'}Your additional data{/ts}</h2>
@@ -375,13 +405,11 @@
                                     {include file="CRM/UF/Form/Block.tpl" fields=$customPost}
                                 </div>
                             </div>
-                        {* close div class .memberreg-content *}
+                            {* close div class .memberreg-content *}
                         </div>
                     </section>
                 {/if}
                 {* close div class .memberreg-block *}
-
-
 
                 {if $isHonor}
                     <fieldset class="crm-public-form-item crm-group pcp-group">
@@ -391,17 +419,20 @@
                                     {$form.pcp_display_in_roll.html} &nbsp;
                                     {$form.pcp_display_in_roll.label}
                                 </div>
+                                <div class="clear"></div>
                             </div>
                             <div id="nameID" class="crm-public-form-item crm-section is_anonymous-section">
                                 <div class="content">
                                     {$form.pcp_is_anonymous.html}
                                 </div>
+                                <div class="clear"></div>
                             </div>
                             <div id="nickID" class="crm-public-form-item crm-section pcp_roll_nickname-section">
                                 <div class="label">{$form.pcp_roll_nickname.label}</div>
                                 <div class="content">{$form.pcp_roll_nickname.html}
                                     <div class="description">{ts}Enter the name you want listed with this contribution. You can use a nick name like 'The Jones Family' or 'Sarah and Sam'.{/ts}</div>
                                 </div>
+                                <div class="clear"></div>
                             </div>
                             <div id="personalNoteID" class="crm-public-form-item crm-section pcp_personal_note-section">
                                 <div class="label">{$form.pcp_personal_note.label}</div>
@@ -409,6 +440,7 @@
                                     {$form.pcp_personal_note.html}
                                     <div class="description">{ts}Enter a message to accompany this contribution.{/ts}</div>
                                 </div>
+                                <div class="clear"></div>
                             </div>
                         </div>
                     </fieldset>
@@ -451,12 +483,15 @@
                         <div class="content">
                             [x] {$pay_later_text}
                         </div>
-
+                        <div class="clear"></div>
                     </div>
                 </fieldset>
             {/if}
 
-            {include file="CRM/Core/BillingBlockWrapper.tpl"}
+            <div id="billing-payment-block">
+                {include file="CRM/Financial/Form/Payment.tpl" snippet=4}
+            </div>
+            {include file="CRM/common/paymentBlock.tpl"}
 
             {if $is_monetary and $form.bank_account_number}
                 <div id="payment_notice">
@@ -467,7 +502,6 @@
                 </div>
             {/if}
 
-
             {if $isCaptcha}
                 {include file='CRM/common/ReCAPTCHA.tpl'}
             {/if}
@@ -476,15 +510,15 @@
                 <div class="section__wrapper">
 
                     {if $footer_text}
-                    <div class="section__content">
-                        {* open div class .memberreg-footer *}
-                        <div class="memberreg-footer helprow-post">
-                            <div id="footer_text" class="crm-section contribution_footer_text-section description">
-                                {$footer_text}
+                        <div class="section__content">
+                            {* open div class .memberreg-footer *}
+                            <div class="memberreg-footer helprow-post">
+                                <div id="footer_text" class="crm-section contribution_footer_text-section description">
+                                    {$footer_text}
+                                </div>
                             </div>
+                            {* close div class .memberreg-footer *}
                         </div>
-                        {* close div class .memberreg-footer *}
-                    </div>
                     {/if}
 
                     <div class="section__footer">
@@ -509,88 +543,84 @@
             {literal}
 
             cj('input[name="soft_credit_type_id"]').on('change', function () {
-                enableHonorType();
+              enableHonorType();
             });
 
             function enableHonorType() {
-                var selectedValue = cj('input[name="soft_credit_type_id"]:checked');
-                if (selectedValue.val() > 0) {
-                    cj('#honorType').show();
-                }
-                else {
-                    cj('#honorType').hide();
-                }
+              var selectedValue = cj('input[name="soft_credit_type_id"]:checked');
+              if (selectedValue.val() > 0) {
+                cj('#honorType').show();
+              } else {
+                cj('#honorType').hide();
+              }
             }
 
             cj('input[id="is_recur"]').on('change', function () {
-                toggleRecur();
+              toggleRecur();
             });
 
             function toggleRecur() {
-                var isRecur = cj('input[id="is_recur"]:checked');
-                var allowAutoRenew = {/literal}'{$allowAutoRenewMembership}'{literal};
-                var quickConfig = {/literal}{$quickConfig}{literal};
-                if (allowAutoRenew && cj("#auto_renew") && quickConfig) {
-                    showHideAutoRenew(null);
-                }
-                if (isRecur.val() > 0) {
-                    cj('#recurHelp').show();
-                    cj('#amount_sum_label').text('{/literal}{ts escape='js'}Regular amount{/ts}{literal}');
-                }
-                else {
-                    cj('#recurHelp').hide();
-                    cj('#amount_sum_label').text('{/literal}{ts escape='js'}Total Amount{/ts}{literal}');
-                }
+              var isRecur = cj('input[id="is_recur"]:checked');
+              var allowAutoRenew = {/literal}'{$allowAutoRenewMembership}'{literal};
+              var quickConfig = {/literal}{$quickConfig}{literal};
+              if (allowAutoRenew && cj("#auto_renew") && quickConfig) {
+                showHideAutoRenew(null);
+              }
+              if (isRecur.val() > 0) {
+                cj('#recurHelp').show();
+                cj('#amount_sum_label').text('{/literal}{ts escape='js'}Regular amount{/ts}{literal}');
+              } else {
+                cj('#recurHelp').hide();
+                cj('#amount_sum_label').text('{/literal}{ts escape='js'}Total Amount{/ts}{literal}');
+              }
             }
 
             function pcpAnonymous() {
-                // clear nickname field if anonymous is true
-                if (document.getElementsByName("pcp_is_anonymous")[1].checked) {
-                    document.getElementById('pcp_roll_nickname').value = '';
+              // clear nickname field if anonymous is true
+              if (document.getElementsByName("pcp_is_anonymous")[1].checked) {
+                document.getElementById('pcp_roll_nickname').value = '';
+              }
+              if (!document.getElementsByName("pcp_display_in_roll")[0].checked) {
+                cj('#nickID').hide();
+                cj('#nameID').hide();
+                cj('#personalNoteID').hide();
+              } else {
+                if (document.getElementsByName("pcp_is_anonymous")[0].checked) {
+                  cj('#nameID').show();
+                  cj('#nickID').show();
+                  cj('#personalNoteID').show();
+                } else {
+                  cj('#nameID').show();
+                  cj('#nickID').hide();
+                  cj('#personalNoteID').hide();
                 }
-                if (!document.getElementsByName("pcp_display_in_roll")[0].checked) {
-                    cj('#nickID').hide();
-                    cj('#nameID').hide();
-                    cj('#personalNoteID').hide();
-                }
-                else {
-                    if (document.getElementsByName("pcp_is_anonymous")[0].checked) {
-                        cj('#nameID').show();
-                        cj('#nickID').show();
-                        cj('#personalNoteID').show();
-                    }
-                    else {
-                        cj('#nameID').show();
-                        cj('#nickID').hide();
-                        cj('#personalNoteID').hide();
-                    }
-                }
+              }
             }
 
             CRM.$(function ($) {
-                enableHonorType();
-                toggleRecur();
-                skipPaymentMethod();
+              enableHonorType();
+              toggleRecur();
+              skipPaymentMethod();
             });
 
             CRM.$(function ($) {
-                // highlight price sets
-                function updatePriceSetHighlight() {
-                    $('#priceset .price-set-row span').removeClass('highlight');
-                    $('#priceset .price-set-row input:checked').parent().addClass('highlight');
-                }
+              // highlight price sets
+              function updatePriceSetHighlight() {
+                $('#priceset .price-set-row span').removeClass('highlight');
+                $('#priceset .price-set-row input:checked').parent().addClass('highlight');
+              }
 
-                $('#priceset input[type="radio"]').change(updatePriceSetHighlight);
-                updatePriceSetHighlight();
+              $('#priceset input[type="radio"]').change(updatePriceSetHighlight);
+              updatePriceSetHighlight();
 
-                // Update pledge contribution amount when pledge checkboxes change
-                $("input[name^='pledge_amount']").on('change', function () {
-                    var total = 0;
-                    $("input[name^='pledge_amount']:checked").each(function () {
-                        total += Number($(this).attr('amount'));
-                    });
-                    $("input[name^='price_']").val(total.toFixed(2));
+              // Update pledge contribution amount when pledge checkboxes change
+              $("input[name^='pledge_amount']").on('change', function () {
+                var total = 0;
+                $("input[name^='pledge_amount']:checked").each(function () {
+                  total += Number($(this).attr('amount'));
                 });
+                $("input[name^='price_']").val(total.toFixed(2));
+              });
             });
             {/literal}
         </script>
