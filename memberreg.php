@@ -47,8 +47,8 @@ function memberreg_civicrm_uninstall() {
  */
 function memberreg_civicrm_enable() {
   // Assign default parameters.
-  CRM_Core_BAO_Setting::setItem(0, 'memberreg', 'memberreg-css');
-  CRM_Core_BAO_Setting::setItem(0, 'memberreg', 'memberreg-js');
+  Civi::settings()->set('memberreg-css', 0);
+  Civi::settings()->set('memberreg-js', 0);
   // Continue.
   _memberreg_civix_civicrm_enable();
 }
@@ -148,12 +148,12 @@ function memberreg_civicrm_buildForm($formName, &$form) {
    */
   if (strpos($formName, 'CRM_Contribute_Form_Contribution_') !== FALSE) {
     // include CSS file.
-    if (CRM_Core_BAO_Setting::getItem('memberreg', 'memberreg-css')) {
+    if (Civi::settings()->get('memberreg-css')) {
       CRM_Core_Resources::singleton()
         ->addStyleFile('be.ctrl.memberreg', 'css/ctrl-memberreg.css');
     }
     // include JS file.
-    if (CRM_Core_BAO_Setting::getItem('memberreg', 'memberreg-js')) {
+    if (Civi::settings()->get('memberreg-js')) {
       CRM_Core_Resources::singleton()
         ->addScriptFile('be.ctrl.memberreg', 'js/ctrl-memberreg.js');
     }

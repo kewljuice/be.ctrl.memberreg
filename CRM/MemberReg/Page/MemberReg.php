@@ -14,16 +14,15 @@ class CRM_MemberReg_Page_MemberReg extends CRM_Core_Page {
     if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'update') {
       // CSS.
       $css = (isset($_REQUEST['css']) ? 1 : 0);
-      CRM_Core_BAO_Setting::setItem($css, 'memberreg', 'memberreg-css');
+      Civi::settings()->set('memberreg-css', $css);
       // JS.
       $js = (isset($_REQUEST['js']) ? 1 : 0);
-      CRM_Core_BAO_Setting::setItem($js, 'memberreg', 'memberreg-js');
-
+      Civi::settings()->set('memberreg-js', $css);
       CRM_Core_Session::setStatus(ts('Settings changed'), ts('Saved'), 'success');
     }
     // Variables.
-    $css = CRM_Core_BAO_Setting::getItem('memberreg', 'memberreg-css');
-    $js = CRM_Core_BAO_Setting::getItem('memberreg', 'memberreg-js');
+    $css = Civi::settings()->get('memberreg-css');
+    $js = Civi::settings()->get('memberreg-js');
     // Build form.
     $form = "<form action=" . $url . " method='post'>";
     $form .= "<input type='hidden' name='action' value='update'>";
@@ -32,7 +31,7 @@ class CRM_MemberReg_Page_MemberReg extends CRM_Core_Page {
     // JS.
     $form .= "<label><input type='checkbox' id='js' name='js' value='1' " . ($js ? " checked='checked' " : "") . ">Include extension javascript</label><br>";
     $form .= "<div class='crm-submit-buttons'>";
-    $form .= "<span class='crm-button'><input class='crm-form-submit default' type='submit' value='Submit'></span>";
+    $form .= "<input class='crm-form-submit default' type='submit' value='Submit'>";
     $form .= "</div>";
     $form .= "</form>";
     // Assign form.
